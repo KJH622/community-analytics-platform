@@ -1,0 +1,1 @@
+"""Political analytics domain."""
