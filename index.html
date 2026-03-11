@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>커뮤니티 지수 분석 와이어프레임</title>
+  <style>
+    :root {
+      --bg: #f2efe8;
+      --panel: #fffdf8;
+      --line: #1f1f1f;
+      --muted: #6c6a66;
+      --soft: #d7d2c7;
+      --accent: #c95f37;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+      background:
+        radial-gradient(circle at top left, #f9f5ec 0, #f2efe8 38%, #ece6d9 100%);
+      color: var(--line);
+    }
+
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 2px solid var(--line);
+      background: var(--panel);
+      padding: 18px 22px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand strong {
+      font-size: 28px;
+      letter-spacing: 0.04em;
+    }
+
+    .brand span,
+    .topbar nav {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    .panel {
+      border: 2px solid var(--line);
+      background: var(--panel);
+      padding: 18px;
+      box-shadow: 8px 8px 0 #d9d1c2;
+    }
+
+    .section-label {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border: 1.5px solid var(--line);
+      background: #f6f1e5;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .headline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .headline h1,
+    .headline h2 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .headline p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+      gap: 14px;
+    }
+
+    .chart-main {
+      min-height: 330px;
+    }
+
+    .chart-main svg {
+      height: 180px;
+    }
+
+    .chart-stack {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .chart-card {
+      border: 1.5px solid var(--line);
+      padding: 14px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px) 0 0 / 100% 32px,
+        linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px) 0 0 / 32px 100%;
+    }
+
+    .chart-card h3,
+    .summary-card h3,
+    .feed-card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .metric strong {
+      color: var(--line);
+      font-size: 22px;
+    }
+
+    svg {
+      width: 100%;
+      height: 120px;
+    }
+
+    .axis {
+      stroke: #232323;
+      stroke-width: 1.2;
+      fill: none;
+    }
+
+    .line {
+      stroke: var(--accent);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .summary-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .score-box {
+      border: 1.5px solid var(--line);
+      padding: 14px;
+      background: #faf5eb;
+    }
+
+    .score-box strong {
+      display: block;
+      font-size: 48px;
+      margin: 8px 0 4px;
+    }
+
+    .summary-lines {
+      display: grid;
+      gap: 10px;
+    }
+
+    .summary-line {
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      background: #f7f2e8;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .layout-note {
+      border: 1.5px dashed var(--line);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .feed-card table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .feed-card th,
+    .feed-card td {
+      border-top: 1px solid var(--soft);
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    .feed-card th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .rank {
+      width: 56px;
+      font-weight: 700;
+    }
+
+    .title-cell strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--line);
+      padding: 4px 8px;
+      font-size: 12px;
+      background: #f3ecde;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .charts {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-stack {
+        grid-template-rows: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 16px;
+      }
+
+      .topbar,
+      .headline {
+        display: block;
+      }
+
+      .headline h1,
+      .headline h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .feed-card {
+        overflow-x: auto;
+      }
+
+      .feed-card table {
+        min-width: 760px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand">
+        <strong>HATE RATE</strong>
+        <span>커뮤니티 반응을 수치로 읽는 혐오 지수 대시보드</span>
+      </div>
+      <nav>와이어프레임 / 메인 대시보드 / 인기글 모니터링</nav>
+    </header>
+
+    <section class="hero">
+      <article class="panel">
+        <span class="section-label">Market-like Index Strip</span>
+        <div class="headline">
+          <div>
+            <h1>오늘의 지수 흐름</h1>
+            <p>나스닥, 내부 지수, 코스피를 한 번에 비교하는 첫 화면</p>
+          </div>
+          <p>실시간 대신 와이어프레임용 예시 값</p>
+        </div>
+
+        <div class="charts">
+          <section class="chart-card chart-main">
+            <div>
+              <h3>혐오 지수</h3>
+              <div class="metric"><span>커뮤니티 분석 핵심</span><strong>67.4</strong></div>
+            </div>
+            <svg viewBox="0 0 260 120" aria-label="혐오 지수 그래프 예시">
+              <path class="axis" d="M8 8 V112 H252" />
+              <path class="line" d="M18 98 L48 82 L78 70 L108 78 L138 58 L168 48 L198 34 L228 22" />
+            </svg>
+            <div class="badge">경고 단계 / 언급량 증가</div>
+          </section>
+
+          <div class="chart-stack">
+            <section class="chart-card">
+              <div>
+                <h3>나스닥</h3>
+                <div class="metric"><span>기준 시장 흐름</span><strong>17,842</strong></div>
+              </div>
+              <svg viewBox="0 0 260 120" aria-label="나스닥 그래프 예시">
+                <path class="axis" d="M8 8 V112 H252" />
+                <path class="line" d="M18 88 L48 76 L78 80 L108 62 L138 52 L168 40 L198 46 L228 28" />
+              </svg>
+              <div class="badge">상승 우세 / 외부 기준선</div>
+            </section>
+
+            <section class="chart-card">
+              <div>
+                <h3>코스피</h3>
+                <div class="metric"><span>국내 체감 흐름</span><strong>2,744</strong></div>
+              </div>
+              <svg viewBox="0 0 260 120" aria-label="코스피 그래프 예시">
+                <path class="axis" d="M8 8 V112 H252" />
+                <path class="line" d="M18 74 L48 70 L78 76 L108 64 L138 60 L168 68 L198 58 L228 52" />
+              </svg>
+              <div class="badge">보합권 / 완만한 반등</div>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel summary-card">
+        <span class="section-label">3-Line Summary</span>
+        <div class="headline">
+          <div>
+            <h2>지수 3줄평</h2>
+            <p>운영자 혹은 AI 요약이 들어갈 자리</p>
+          </div>
+        </div>
+
+        <section class="score-box">
+          <span>오늘의 종합 위험도</span>
+          <strong>HIGH</strong>
+          <small>혐오 표현 비율, 확산 속도, 반응 강도를 합산한 예시 카드</small>
+        </section>
+
+        <div class="summary-lines">
+          <div class="summary-line">1. 인기 게시글 상위권에서 자극적인 키워드가 반복되며 혐오 지수가 빠르게 상승 중.</div>
+          <div class="summary-line">2. 특정 이슈에 반응이 몰리면서 댓글 감정 편차가 커지고 확산 속도도 평소보다 높음.</div>
+          <div class="summary-line">3. 모니터링 우선 커뮤니티를 좁혀 대응하면 단기 급등 구간을 빠르게 파악 가능.</div>
+        </div>
+
+        <div class="layout-note">와이어프레임 메모: 이 영역은 추후 "AI 분석", "관리자 코멘트", "경고 알림" 카드로 확장 가능</div>
+      </aside>
+    </section>
+
+    <section class="panel feed-card">
+      <span class="section-label">Top 10 Hot Posts</span>
+      <div class="headline">
+        <div>
+          <h2>커뮤니티 인기글</h2>
+          <p>실시간 수집된 인기글 10개를 목록으로 보여주는 영역</p>
+        </div>
+        <p>제목 클릭 시 본문 분석 페이지로 이동하는 구조 가정</p>
+      </div>
+
+      <table aria-label="커뮤니티 인기글 목록 와이어프레임">
+        <thead>
+          <tr>
+            <th class="rank">순위</th>
+            <th>글 제목</th>
+            <th>커뮤니티</th>
+            <th>반응</th>
+            <th>지수</th>
+            <th>상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rank">01</td>
+            <td class="title-cell"><strong>오늘 올라온 이슈 정리, 댓글 반응 폭발</strong>짧은 요약 미리보기 영역</td>
+            <td>커뮤니티 A</td>
+            <td>조회 18.2k / 댓글 1.2k</td>
+            <td>78</td>
+            <td><span class="badge">급상승</span></td>
+          </tr>
+          <tr>
+            <td class="rank">02</td>
+            <td class="title-cell"><strong>논란 글 재점화, 유사 표현 확산 중</strong>중복 이슈 감지 가능 구간</td>
+            <td>커뮤니티 B</td>
+            <td>조회 15.4k / 댓글 980</td>
+            <td>73</td>
+            <td><span class="badge">주의</span></td>
+          </tr>
+          <tr>
+            <td class="rank">03</td>
+            <td class="title-cell"><strong>추천 수 급증한 게시글</strong>추천, 비추천 추이 비교</td>
+            <td>커뮤니티 C</td>
+            <td>조회 14.1k / 댓글 410</td>
+            <td>64</td>
+            <td><span class="badge">관찰</span></td>
+          </tr>
+          <tr>
+            <td class="rank">04</td>
+            <td class="title-cell"><strong>댓글 감정 편향이 큰 글</strong>긍정/부정 편차 표시 가능</td>
+            <td>커뮤니티 A</td>
+            <td>조회 12.6k / 댓글 760</td>
+            <td>69</td>
+            <td><span class="badge">주의</span></td>
+          </tr>
+          <tr>
+            <td class="rank">05</td>
+            <td class="title-cell"><strong>짧은 시간 내 공유량이 높은 글</strong>SNS 확산 연결 가능</td>
+            <td>커뮤니티 D</td>
+            <td>조회 11.9k / 댓글 304</td>
+            <td>58</td>
+            <td><span class="badge">확산</span></td>
+          </tr>
+          <tr>
+            <td class="rank">06</td>
+            <td class="title-cell"><strong>특정 집단 키워드 언급 증가</strong>키워드 하이라이트 자리</td>
+            <td>커뮤니티 E</td>
+            <td>조회 10.7k / 댓글 522</td>
+            <td>71</td>
+            <td><span class="badge">경고</span></td>
+          </tr>
+          <tr>
+            <td class="rank">07</td>
+            <td class="title-cell"><strong>논쟁이 길어지는 실시간 글</strong>댓글 속도 그래프 연동 가능</td>
+            <td>커뮤니티 F</td>
+            <td>조회 9.8k / 댓글 610</td>
+            <td>62</td>
+            <td><span class="badge">관찰</span></td>
+          </tr>
+          <tr>
+            <td class="rank">08</td>
+            <td class="title-cell"><strong>반응 대비 신고 비율이 높은 글</strong>관리 지표 연결용 예시</td>
+            <td>커뮤니티 B</td>
+            <td>조회 9.5k / 댓글 280</td>
+            <td>66</td>
+            <td><span class="badge">주의</span></td>
+          </tr>
+          <tr>
+            <td class="rank">09</td>
+            <td class="title-cell"><strong>단어 필터에 자주 걸리는 주제</strong>유해 표현 탐지 연결 가능</td>
+            <td>커뮤니티 G</td>
+            <td>조회 8.9k / 댓글 198</td>
+            <td>75</td>
+            <td><span class="badge">경고</span></td>
+          </tr>
+          <tr>
+            <td class="rank">10</td>
+            <td class="title-cell"><strong>조회수는 낮지만 반응이 과열된 글</strong>숨은 위험 글 예시</td>
+            <td>커뮤니티 H</td>
+            <td>조회 7.3k / 댓글 440</td>
+            <td>61</td>
+            <td><span class="badge">관찰</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
