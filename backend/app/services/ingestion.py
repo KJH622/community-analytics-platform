@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.analytics.rule_based import RuleBasedAnalyzer
 from app.analytics.snapshots import calculate_daily_snapshot
+from app.collectors.communities.arca_live import ArcaLiveConnector
 from app.collectors.communities.live_forums import BobaedreamConnector, ClienConnector, PpomppuConnector
 from app.collectors.indicators.fred import FredIndicatorCollector
 from app.collectors.indicators.fx import FrankfurterFxCollector
@@ -20,10 +21,12 @@ class IngestionService:
         self.settings = get_settings()
         self.analyzer = RuleBasedAnalyzer()
         self.community_collectors = [PpomppuConnector(), BobaedreamConnector(), ClienConnector()]
+        self.arca_collectors = [ArcaLiveConnector()]
         self.collector_map = {
             "collect_indicators": [FredIndicatorCollector(), FrankfurterFxCollector()],
             "collect_news": [RssNewsCollector()],
             "collect_community": self.community_collectors,
+            "collect_arca_stock": self.arca_collectors,
             "backfill_community_history": self.community_collectors,
             "refresh_snapshots": [],
         }
@@ -80,7 +83,7 @@ class IngestionService:
                     if result.message:
                         messages.append(result.message)
                 sentiment_count = self._refresh_sentiments(db)
-                if job_name in {"collect_news", "collect_community"}:
+                if job_name in {"collect_news", "collect_community", "collect_arca_stock"}:
                     snapshot_count = self._refresh_snapshot_range(
                         db,
                         start_date=datetime.now(tz=timezone.utc).date() - timedelta(days=2),

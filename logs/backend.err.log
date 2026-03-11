@@ -1,11 +1,12 @@
-INFO:     Started server process [26092]
+INFO:     Started server process [48832]
 INFO:     Waiting for application startup.
-2026-03-12 04:13:40,174 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 04:13:40,174 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 04:13:40,174 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 04:13:40,175 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 04:13:40,175 | INFO | apscheduler.scheduler | Scheduler started
+2026-03-12 04:40:23,636 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 04:40:23,636 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 04:40:23,637 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 04:40:23,637 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 04:40:23,637 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 04:40:23,638 | INFO | apscheduler.scheduler | Scheduler started
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-2026-03-12 04:14:14,641 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=3mo&interval=1d "HTTP/1.1 200 OK"
-2026-03-12 04:14:15,150 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKQ11?range=3mo&interval=1d "HTTP/1.1 200 OK"
+2026-03-12 04:40:43,361 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=3mo&interval=1d "HTTP/1.1 200 OK"
+2026-03-12 04:40:43,869 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKQ11?range=3mo&interval=1d "HTTP/1.1 200 OK"

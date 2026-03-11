@@ -20,5 +20,6 @@ def build_scheduler() -> BackgroundScheduler:
     scheduler.add_job(lambda: _run("collect_indicators"), CronTrigger(minute="*/30"), id="collect_indicators")
     scheduler.add_job(lambda: _run("collect_news"), CronTrigger(minute="*/20"), id="collect_news")
     scheduler.add_job(lambda: _run("collect_community"), CronTrigger(hour="*/1"), id="collect_community")
+    scheduler.add_job(lambda: _run("collect_arca_stock"), CronTrigger(minute=5), id="collect_arca_stock")
     scheduler.add_job(lambda: _run("refresh_snapshots"), CronTrigger(hour=23, minute=55), id="refresh_snapshots")
     return scheduler
