@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
 from app.analytics.rule_based import RuleBasedAnalyzer
-from app.models import CommunityPost
+from app.models import CommunityPost, Sentiment
 from app.schemas.community import CommunityPostRead
 from app.services.query import get_community_posts
 
@@ -31,8 +31,9 @@ def list_community_posts(
         source_code=source_code,
         topic_category=topic_category,
     )
+    sentiment_map = _load_sentiment_map(db, [item.id for item in items])
     return {
-        "items": [_serialize_post(item) for item in items],
+        "items": [_serialize_post(item, sentiment_map.get(item.id)) for item in items],
         "total": total,
         "page": page,
         "page_size": page_size,
@@ -44,10 +45,30 @@ def get_community_post(post_id: int, db: Session = Depends(get_db)):
     post = db.execute(select(CommunityPost).where(CommunityPost.id == post_id)).scalar_one_or_none()
     if post is None:
         raise HTTPException(status_code=404, detail="Community post not found")
-    return _serialize_post(post)
+    sentiment = db.execute(
+        select(Sentiment).where(
+            Sentiment.document_type == "community_post",
+            Sentiment.document_id == post.id,
+        )
+    ).scalar_one_or_none()
+    return _serialize_post(post, sentiment)
 
 
-def _serialize_post(post: CommunityPost) -> dict:
+def _serialize_post(post: CommunityPost, sentiment: Sentiment | None = None) -> dict:
+    analysis = (
+        {
+            "sentiment_score": sentiment.sentiment_score,
+            "fear_greed_score": sentiment.fear_greed_score,
+            "hate_index": sentiment.hate_index,
+            "uncertainty_score": sentiment.uncertainty_score,
+            "market_bias": sentiment.market_bias,
+            "keywords": sentiment.keywords_json,
+            "topics": sentiment.topics_json,
+            "entities": sentiment.entities_json,
+        }
+        if sentiment is not None
+        else analyzer.analyze(post.title, post.body).__dict__
+    )
     payload = CommunityPostRead.model_validate(
         {
             "id": post.id,
@@ -65,7 +86,19 @@ def _serialize_post(post: CommunityPost) -> dict:
             "downvotes": post.downvotes,
             "comment_count": post.comment_count,
             "original_url": post.original_url,
-            "analysis": analyzer.analyze(post.title, post.body).__dict__,
+            "analysis": analysis,
         }
     )
     return payload.model_dump()
+
+
+def _load_sentiment_map(db: Session, post_ids: list[int]) -> dict[int, Sentiment]:
+    if not post_ids:
+        return {}
+    sentiments = db.execute(
+        select(Sentiment).where(
+            Sentiment.document_type == "community_post",
+            Sentiment.document_id.in_(post_ids),
+        )
+    ).scalars().all()
+    return {item.document_id: item for item in sentiments}

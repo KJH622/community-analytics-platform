@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     fred_api_key: str | None = None
     bank_of_korea_api_key: str | None = None
     openai_api_key: str | None = None
+    openai_community_model: str = "gpt-4o-mini"
+    openai_community_post_limit: int = 20
+    openai_community_title_char_limit: int = 280
+    openai_community_body_char_limit: int = 2400
     seed_demo_data: bool = False
 
     model_config = SettingsConfigDict(

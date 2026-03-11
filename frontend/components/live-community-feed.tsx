@@ -107,13 +107,13 @@ export function LiveCommunityFeed({
                   <MetricBar
                     label="혐오지수"
                     value={analysis.hate_index}
-                    maxValue={3}
+                    maxValue={100}
                     tone={getHateTone(analysis.hate_index)}
                   />
                   <MetricBar
                     label="불확실성"
                     value={analysis.uncertainty_score}
-                    maxValue={3}
+                    maxValue={100}
                     tone={getUncertaintyTone(analysis.uncertainty_score)}
                   />
                   <MetricBar
@@ -232,20 +232,20 @@ function formatTime(value: string) {
 }
 
 function getHateTone(value: number) {
-  if (value >= 2) {
+  if (value >= 65) {
     return "high";
   }
-  if (value >= 1) {
+  if (value >= 35) {
     return "mid";
   }
   return "low";
 }
 
 function getUncertaintyTone(value: number) {
-  if (value >= 2) {
+  if (value >= 65) {
     return "high";
   }
-  if (value >= 0.8) {
+  if (value >= 35) {
     return "mid";
   }
   return "low";
