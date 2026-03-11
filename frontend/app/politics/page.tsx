@@ -1,17 +1,17 @@
 import { ChartPanel } from "@/components/chart-panel";
 import { DomainTabs } from "@/components/domain-tabs";
+import { LiveCommunityFeed } from "@/components/live-community-feed";
 import { MetricCard } from "@/components/metric-card";
-import { TopicDonut } from "@/components/topic-donut";
-import { fetchPoliticsDashboard } from "@/lib/api";
+import { fetchCommunity, fetchDashboardData } from "@/lib/api";
 
 export default async function PoliticsPage() {
-  const data = await fetchPoliticsDashboard();
-  const approval = data.indicator_cards.find((item) => item.code === "president_approval");
-  const national = data.indicator_cards.find((item) => item.code === "national_performance");
-  const partyLatest = data.indicator_cards.find((item) => item.code === "party_support");
-  const latestSentiment = data.political_sentiment_index.at(-1)?.value ?? 0;
-  const latestPolarization = data.polarization_index.at(-1)?.value ?? 0;
-  const latestElectionHeat = data.election_heat_index.at(-1)?.value ?? 0;
+  const [dashboard, politicsPosts] = await Promise.all([
+    fetchDashboardData(),
+    fetchCommunity({ topicCategory: "politics", pageSize: 12 }),
+  ]);
+
+  const latest = dashboard.sentiment[0] ?? null;
+  const topKeyword = dashboard.keywordTrends[0]?.keyword ?? "No keyword";
 
   return (
     <main>
@@ -19,78 +19,57 @@ export default async function PoliticsPage() {
       <div className="page-grid">
         <section className="stack">
           <div className="panel">
-            <h2 className="panel-title">Political Indicator Cards</h2>
+            <h2 className="panel-title">Politics Snapshot</h2>
             <div className="card-grid">
-              <MetricCard label="President Approval" value={`${approval?.value ?? 0}%`} caption={approval?.source ?? "sample"} />
-              <MetricCard label="Party Support" value={`${partyLatest?.value ?? 0}%`} caption={partyLatest?.label ?? "sample"} />
-              <MetricCard label="Political Sentiment" value={`${latestSentiment}`} caption="Community sentiment composite" />
-              <MetricCard label="Polarization Index" value={`${latestPolarization}`} caption="Support, opposition, anger spread" />
-              <MetricCard label="Election Heat" value={`${latestElectionHeat}`} caption="Election-related mention intensity" />
-              <MetricCard label="National Performance" value={`${national?.value ?? 0}%`} caption={national?.label ?? "positive"} />
+              <MetricCard
+                label="Political Sentiment"
+                value={(latest?.sentiment_score ?? 0).toFixed(1)}
+                caption="Latest daily sentiment snapshot"
+              />
+              <MetricCard
+                label="Hate Index"
+                value={(latest?.hate_index ?? 0).toFixed(1)}
+                caption="Useful for hostility and tension tracking"
+              />
+              <MetricCard
+                label="Uncertainty"
+                value={(latest?.uncertainty_score ?? 0).toFixed(1)}
+                caption="Useful for ambiguity and rumor-sensitive days"
+              />
+              <MetricCard
+                label="Top Keyword"
+                value={topKeyword}
+                caption="Most mentioned term in the latest keyword trend list"
+              />
             </div>
           </div>
 
           <ChartPanel
-            title="President Approval Trend"
-            data={data.approval_trend.map((item) => ({ label: item.date.slice(5), value: item.value }))}
+            title="Sentiment Trend"
+            data={dashboard.sentiment.map((item) => ({ label: item.snapshot_date.slice(5), value: item.sentiment_score }))}
           />
 
           <ChartPanel
-            title="Political Keyword Trend"
+            title="Hate Trend"
             color="#285f4b"
-            data={data.keyword_trends.map((item) => ({ label: item.keyword, value: item.mentions }))}
+            data={dashboard.sentiment.map((item) => ({ label: item.snapshot_date.slice(5), value: item.hate_index }))}
           />
 
           <ChartPanel
-            title="Political Sentiment Index"
+            title="Keyword Trend"
             color="#872341"
-            data={data.political_sentiment_index.map((item) => ({ label: item.date.slice(5), value: item.value }))}
+            data={dashboard.keywordTrends.map((item) => ({ label: item.keyword, value: item.mentions }))}
           />
 
-          <div className="panel">
-            <h2 className="panel-title">Political Community Posts</h2>
-            <div className="list">
-              {data.community_posts.map((item) => (
-                <a className="list-item" href={item.original_url} key={item.id} target="_blank">
-                  <div className="list-meta">
-                    {item.board_name ?? item.community_name} - Views {item.view_count ?? 0}
-                  </div>
-                  <strong>{item.title}</strong>
-                  <p>{item.body}</p>
-                </a>
-              ))}
-            </div>
+          <div className="layout-note">
+            This page uses the same crawler database as the market dashboard, but filtered for politics-oriented analysis.
           </div>
         </section>
 
         <aside className="stack">
-          <TopicDonut
-            title="Politician Mentions Top 10"
-            data={data.politician_mentions_top10.map((item) => ({ topic: item.name, documents: item.mentions }))}
-          />
-          <ChartPanel
-            title="Political Polarization Index"
-            color="#1f5f8b"
-            data={data.polarization_index.map((item) => ({ label: item.date.slice(5), value: item.value }))}
-          />
-          <ChartPanel
-            title="Election Interest Index"
-            color="#b5532f"
-            data={data.election_heat_index.map((item) => ({ label: item.date.slice(5), value: item.value }))}
-          />
           <div className="panel">
-            <h2 className="panel-title">Reference Communities</h2>
-            <div className="list">
-              {data.reference_communities.map((item) => (
-                <a className="list-item" href={item.link} key={item.name} target="_blank">
-                  <div className="list-meta">
-                    {item.leaning ?? "unknown"} - {item.status}
-                  </div>
-                  <strong>{item.name}</strong>
-                  <p>{item.description}</p>
-                </a>
-              ))}
-            </div>
+            <h2 className="panel-title">Latest Political Community Posts</h2>
+            <LiveCommunityFeed initialPosts={politicsPosts.items} topicCategory="politics" limit={12} variant="list" />
           </div>
         </aside>
       </div>

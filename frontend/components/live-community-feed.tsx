@@ -2,20 +2,24 @@
 
 import { useEffect, useState, useTransition } from "react";
 
-import { CommunityPost, fetchCommunityLive, refreshCommunityLive } from "@/lib/api";
+import { CommunityPost, fetchCommunityLive } from "@/lib/api";
 
 type LiveCommunityFeedProps = {
   initialPosts: CommunityPost[];
   boardId?: string;
   boardName?: string;
+  sourceCode?: string;
+  topicCategory?: "economy" | "politics";
   variant?: "table" | "list";
   limit?: number;
 };
 
 export function LiveCommunityFeed({
   initialPosts,
-  boardId = "stockus",
+  boardId,
   boardName,
+  sourceCode,
+  topicCategory,
   variant = "list",
   limit = 10,
 }: LiveCommunityFeedProps) {
@@ -25,17 +29,26 @@ export function LiveCommunityFeed({
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
+    setPosts(initialPosts);
+  }, [initialPosts]);
+
+  useEffect(() => {
     const refreshFeed = async () => {
       try {
         setError(null);
-        await refreshCommunityLive(boardId, Math.min(limit, 10));
-        const latest = await fetchCommunityLive({ boardId, boardName, pageSize: limit });
+        const latest = await fetchCommunityLive({
+          boardId,
+          boardName,
+          sourceCode,
+          topicCategory,
+          pageSize: limit,
+        });
         startTransition(() => {
           setPosts(latest.items);
           setLastUpdated(new Date());
         });
       } catch {
-        setError("실시간 개념글을 불러오지 못했습니다.");
+        setError("Unable to refresh the feed right now.");
       }
     };
 
@@ -43,26 +56,28 @@ export function LiveCommunityFeed({
     const timer = window.setInterval(() => {
       void refreshFeed();
     }, 60_000);
+
     return () => window.clearInterval(timer);
-  }, [boardId, boardName, limit, startTransition]);
+  }, [boardId, boardName, limit, sourceCode, startTransition, topicCategory]);
 
   if (variant === "table") {
     return (
       <div className="live-feed">
         <div className="live-feed-meta">
-          <span>{isPending ? "개념글 확인 중..." : "미국주식갤 개념글 반영"}</span>
-          <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "1분 주기 갱신"}</span>
+          <span>{isPending ? "Refreshing..." : "Latest community posts"}</span>
+          <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} updated` : "Auto refresh every 60s"}</span>
         </div>
         {error ? <div className="live-feed-error">{error}</div> : null}
-        <div className="community-grid" role="list" aria-label="실시간 커뮤니티 게시물 목록">
+        <div className="community-grid" role="list" aria-label="community post list">
           {posts.map((post) => {
             const analysis = getAnalysis(post);
+
             return (
               <article className="community-card" key={post.id}>
                 <div className="community-card-top">
                   <div className="community-time">{formatTime(post.created_at)}</div>
                   <div className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                    혐오지수 {analysis.hate_index.toFixed(1)}
+                    Hate {analysis.hate_index.toFixed(1)}
                   </div>
                 </div>
 
@@ -73,14 +88,14 @@ export function LiveCommunityFeed({
                 <p className="community-body">{truncate(post.body, 140)}</p>
 
                 <div className="community-meters">
-                  <MetricBar label="혐오" value={analysis.hate_index} tone={getHateTone(analysis.hate_index)} />
+                  <MetricBar label="Hate" value={analysis.hate_index} tone={getHateTone(analysis.hate_index)} />
                   <MetricBar
-                    label="불확실성"
+                    label="Uncertainty"
                     value={analysis.uncertainty_score}
                     tone={getUncertaintyTone(analysis.uncertainty_score)}
                   />
                   <MetricBar
-                    label="공포/탐욕"
+                    label="Fear / Greed"
                     value={analysis.fear_greed_score}
                     tone={getBiasTone(analysis.market_bias)}
                   />
@@ -88,10 +103,11 @@ export function LiveCommunityFeed({
 
                 <div className="community-card-bottom">
                   <div className="community-meta">
+                    <span>{post.source_name ?? post.source_code ?? "community"}</span>
                     <span>{post.board_name}</span>
-                    <span>조회 {post.view_count ?? 0}</span>
-                    <span>댓글 {post.comment_count ?? 0}</span>
-                    <span>추천 {post.upvotes ?? 0}</span>
+                    <span>Views {post.view_count ?? 0}</span>
+                    <span>Comments {post.comment_count ?? 0}</span>
+                    <span>Upvotes {post.upvotes ?? 0}</span>
                   </div>
                   <div className="community-tags">
                     <span className="signal-badge">{getBiasLabel(analysis.market_bias)}</span>
@@ -113,29 +129,30 @@ export function LiveCommunityFeed({
   return (
     <div className="live-feed">
       <div className="live-feed-meta">
-        <span>{isPending ? "개념글 확인 중..." : "미국주식갤 개념글 반영"}</span>
-        <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "1분 주기 갱신"}</span>
+        <span>{isPending ? "Refreshing..." : "Latest community posts"}</span>
+        <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} updated` : "Auto refresh every 60s"}</span>
       </div>
       {error ? <div className="live-feed-error">{error}</div> : null}
       <div className="list">
         {posts.map((item) => {
           const analysis = getAnalysis(item);
+
           return (
             <a className="list-item" href={item.original_url} key={item.id} target="_blank" rel="noreferrer">
               <div className="list-meta">
-                {item.board_name} · 조회 {item.view_count ?? 0} · 추천 {item.upvotes ?? 0} · 댓글 {item.comment_count ?? 0}
+                {(item.source_name ?? item.source_code ?? "community")} / {item.board_name} / Views {item.view_count ?? 0}
               </div>
               <div className="list-headline">
                 <strong>{item.title}</strong>
                 <span className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                  혐오 {analysis.hate_index.toFixed(1)}
+                  Hate {analysis.hate_index.toFixed(1)}
                 </span>
               </div>
               <p>{item.body}</p>
               <div className="inline-analysis">
                 <span>{getBiasLabel(analysis.market_bias)}</span>
-                <span>불확실성 {analysis.uncertainty_score.toFixed(1)}</span>
-                <span>핵심어 {analysis.keywords.slice(0, 2).join(", ") || "-"}</span>
+                <span>Uncertainty {analysis.uncertainty_score.toFixed(1)}</span>
+                <span>Keywords {analysis.keywords.slice(0, 2).join(", ") || "-"}</span>
               </div>
             </a>
           );
@@ -207,25 +224,26 @@ function getBiasTone(value: string) {
 
 function getBiasLabel(value: string) {
   if (value === "bullish") {
-    return "강세";
+    return "Bullish";
   }
   if (value === "bearish") {
-    return "약세";
+    return "Bearish";
   }
-  return "중립";
+  return "Neutral";
 }
 
 function getAnalysis(post: CommunityPost) {
-  return (
-    post.analysis ?? {
-      sentiment_score: 0,
-      fear_greed_score: 50,
-      hate_index: 0,
-      uncertainty_score: 0,
-      market_bias: "neutral",
-      keywords: [],
-      topics: [],
-      entities: [],
-    }
-  );
+  if (post.analysis) {
+    return post.analysis;
+  }
+  return {
+    sentiment_score: post.sentiment_score ?? 0,
+    fear_greed_score: post.fear_greed_score ?? 50,
+    hate_index: post.hate_index ?? 0,
+    uncertainty_score: post.uncertainty_score ?? 0,
+    market_bias: post.market_bias ?? "neutral",
+    keywords: post.keywords ?? [],
+    topics: [],
+    entities: [],
+  };
 }

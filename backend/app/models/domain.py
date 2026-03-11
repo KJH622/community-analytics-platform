@@ -48,6 +48,7 @@ class Source(Base):
     )
 
     connectors: Mapped[list["SourceConnector"]] = relationship(back_populates="source")
+    community_posts: Mapped[list["CommunityPost"]] = relationship(back_populates="source")
 
 
 class SourceConnector(Base):
@@ -157,11 +158,14 @@ class CommunityPost(Base):
     __table_args__ = (
         UniqueConstraint("source_id", "external_post_id", name="uq_community_external_post"),
         Index("ix_community_posts_lookup", "board_name", "created_at"),
+        Index("ix_community_posts_topic_lookup", "topic_category", "created_at"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     source_id: Mapped[int] = mapped_column(ForeignKey("sources.id", ondelete="RESTRICT"), index=True)
+    board_code: Mapped[str | None] = mapped_column(String(100), index=True)
     board_name: Mapped[str] = mapped_column(String(255), index=True)
+    topic_category: Mapped[str | None] = mapped_column(String(50), index=True)
     external_post_id: Mapped[str] = mapped_column(String(255))
     title: Mapped[str] = mapped_column(String(500), index=True)
     body: Mapped[str] = mapped_column(Text)
@@ -175,6 +179,7 @@ class CommunityPost(Base):
     raw_payload: Mapped[dict] = mapped_column(JSON, default=dict)
 
     comments: Mapped[list["CommunityComment"]] = relationship(back_populates="post")
+    source: Mapped["Source"] = relationship(back_populates="community_posts")
 
 
 class CommunityComment(Base):

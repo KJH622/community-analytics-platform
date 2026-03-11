@@ -8,7 +8,9 @@ from app.collectors.base.contracts import BaseCollector, CollectorResult
 
 @dataclass
 class NormalizedCommunityPost:
+    board_code: str | None
     board_name: str
+    topic_category: str | None
     external_post_id: str
     title: str
     body: str

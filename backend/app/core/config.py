@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     app_env: Literal["local", "test", "production"] = "local"
     app_host: str = "0.0.0.0"
     app_port: int = 8000
-    database_url: str = "postgresql+psycopg://postgres:postgres@db:5432/market_signal_hub"
+    database_url: str = "sqlite:///./community_analytics.db"
     scheduler_enabled: bool = True
     scheduler_timezone: str = "Asia/Seoul"
     api_prefix: str = "/api/v1"
@@ -18,12 +18,18 @@ class Settings(BaseSettings):
     default_user_agent: str = "market-signal-hub/0.1 (+https://example.local)"
     request_timeout_seconds: int = 20
     request_rate_limit_per_source: float = 1.0
+    community_request_interval_seconds: float = 1.0
+    community_backfill_request_interval_seconds: float = 1.75
+    community_request_jitter_seconds: float = 0.2
     community_max_pages_per_board: int = 3
     community_max_posts_per_board: int = 40
+    community_incremental_pages_per_board: int = 3
+    community_history_days: int = 30
+    community_history_max_pages_per_board: int = 800
     fred_api_key: str | None = None
     bank_of_korea_api_key: str | None = None
     openai_api_key: str | None = None
-    seed_demo_data: bool = True
+    seed_demo_data: bool = False
 
     model_config = SettingsConfigDict(
         env_file=".env",

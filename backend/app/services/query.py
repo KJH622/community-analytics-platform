@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import Counter
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.models import (
     Article,
@@ -12,6 +12,7 @@ from app.models import (
     EconomicIndicator,
     IndicatorRelease,
     Sentiment,
+    Source,
 )
 
 
@@ -79,12 +80,20 @@ def get_community_posts(
     page_size: int,
     board_name: str | None = None,
     board_id: str | None = None,
+    source_code: str | None = None,
+    topic_category: str | None = None,
 ):
-    stmt = select(CommunityPost)
+    stmt = select(CommunityPost).join(Source, CommunityPost.source_id == Source.id).options(
+        selectinload(CommunityPost.source)
+    )
     if board_name:
         stmt = stmt.where(CommunityPost.board_name == board_name)
     if board_id:
         stmt = stmt.where(CommunityPost.external_post_id.like(f"{board_id}:%"))
+    if source_code:
+        stmt = stmt.where(Source.code == source_code)
+    if topic_category:
+        stmt = stmt.where(CommunityPost.topic_category == topic_category)
     total = db.execute(select(func.count()).select_from(stmt.subquery())).scalar_one()
     items = db.execute(
         stmt.order_by(CommunityPost.created_at.desc()).offset((page - 1) * page_size).limit(page_size)

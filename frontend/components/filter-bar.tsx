@@ -1,38 +1,40 @@
 type FilterBarProps = {
   title?: string;
+  description?: string;
 };
 
-export function FilterBar({ title }: FilterBarProps) {
+export function FilterBar({ title, description }: FilterBarProps) {
   return (
     <div className="panel">
       {title ? <h2 className="panel-title">{title}</h2> : null}
+      {description ? <p className="list-meta">{description}</p> : null}
       <div className="filter-bar">
         <label className="field">
-          <span>날짜</span>
+          <span>Date</span>
           <input type="date" disabled defaultValue={new Date().toISOString().slice(0, 10)} />
         </label>
         <label className="field">
-          <span>소스</span>
+          <span>Source</span>
           <select disabled defaultValue="all">
-            <option value="all">전체</option>
+            <option value="all">All</option>
           </select>
         </label>
         <label className="field">
-          <span>국가</span>
+          <span>Board</span>
           <select disabled defaultValue="all">
-            <option value="all">전체</option>
+            <option value="all">All</option>
           </select>
         </label>
         <label className="field">
-          <span>주제</span>
+          <span>Topic</span>
           <select disabled defaultValue="all">
-            <option value="all">전체</option>
+            <option value="all">All</option>
           </select>
         </label>
         <label className="field">
-          <span>감정</span>
+          <span>Sentiment</span>
           <select disabled defaultValue="all">
-            <option value="all">전체</option>
+            <option value="all">All</option>
           </select>
         </label>
       </div>

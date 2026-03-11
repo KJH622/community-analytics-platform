@@ -6,14 +6,14 @@ export default async function NewsPage() {
 
   return (
     <main className="stack" style={{ marginTop: 22 }}>
-      <FilterBar title="뉴스 검색 필터" />
+      <FilterBar title="News Monitor" description="Recent news documents stored in the platform database." />
       <section className="panel">
-        <h2 className="panel-title">오늘의 뉴스 헤드라인</h2>
+        <h2 className="panel-title">Latest News Headlines</h2>
         <div className="list">
           {data.items.map((item) => (
-            <a className="list-item" href={item.canonical_url} key={item.id} target="_blank">
+            <a className="list-item" href={item.canonical_url} key={item.id} target="_blank" rel="noreferrer">
               <div className="list-meta">
-                {item.publisher ?? "unknown"} · {new Date(item.published_at).toLocaleString("ko-KR")}
+                {item.publisher ?? "unknown"} / {new Date(item.published_at).toLocaleString("ko-KR")}
               </div>
               <strong>{item.title}</strong>
               <p>{item.body}</p>
@@ -26,6 +26,7 @@ export default async function NewsPage() {
               </div>
             </a>
           ))}
+          {data.items.length === 0 ? <div className="list-item">No news has been stored yet.</div> : null}
         </div>
       </section>
     </main>

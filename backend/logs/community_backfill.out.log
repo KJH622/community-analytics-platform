@@ -1,0 +1,4 @@
+job=backfill_community_history
+status=failed
+records_processed=0
+Job failed: RetryError[<Future at 0x22f181fa6c0 state=finished raised ConnectError>]

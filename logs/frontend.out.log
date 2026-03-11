@@ -1,0 +1,20 @@
+
+> market-signal-hub-frontend@0.1.0 dev
+> next dev --hostname 0.0.0.0 --port 3000
+
+   ▲ Next.js 15.2.0
+   - Local:        http://localhost:3000
+   - Network:      http://0.0.0.0:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.7s
+ ○ Compiling /politics ...
+ ✓ Compiled /politics in 14.7s (1903 modules)
+ GET /news 200 in 15937ms
+ GET /community 200 in 17752ms
+ GET / 200 in 18292ms
+ GET /politics 200 in 18010ms
+ GET / 200 in 5609ms
+ GET / 200 in 284ms
+ GET /politics 200 in 47ms

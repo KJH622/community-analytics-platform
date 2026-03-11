@@ -16,10 +16,15 @@ class CommunityPostAnalysisRead(BaseModel):
 
 class CommunityPostRead(BaseModel):
     id: int
+    source_code: str | None = None
+    source_name: str | None = None
+    board_code: str | None = None
     board_name: str
+    topic_category: str | None = None
     title: str
     body: str
     created_at: datetime
+    author_hash: str | None = None
     view_count: int | None
     upvotes: int | None
     downvotes: int | None

@@ -9,13 +9,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko">
+    <html lang="en">
       <body>
         <div className="shell">
           <header className="topbar">
             <div>
               <div className="brand-title">Market Signal Hub</div>
-              <div className="brand-subtitle">경제 데이터, 뉴스, 커뮤니티 반응을 한 화면에서 읽는 통합 대시보드</div>
+              <div className="brand-subtitle">
+                Hourly crawl of Korean economy and politics communities, ready for downstream sentiment analysis.
+              </div>
             </div>
             <nav className="nav">
               <Link href="/">Dashboard</Link>

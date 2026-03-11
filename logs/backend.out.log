@@ -1,0 +1,17 @@
+INFO:     127.0.0.1:64227 - "GET /api/v1/community/posts?page=1&page_size=2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59373 - "GET /api/v1/indicators/latest HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59374 - "GET /api/v1/news?page=1&page_size=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59376 - "GET /api/v1/analytics/daily-sentiment?limit=7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59375 - "GET /api/v1/community/posts?page=1&page_size=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59381 - "GET /api/v1/news?page=1&page_size=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59379 - "GET /api/v1/community/posts?page=1&page_size=8&topic_category=economy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59382 - "GET /api/v1/community/posts?page=1&page_size=12&topic_category=economy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59380 - "GET /api/v1/community/posts?page=1&page_size=12&topic_category=politics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59378 - "GET /api/v1/analytics/topic-breakdown HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59377 - "GET /api/v1/analytics/keyword-trends?limit=8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58232 - "GET /api/v1/community/posts?page=1&page_size=8&topic_category=economy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49666 - "GET /api/v1/community/posts?page=1&page_size=8&topic_category=economy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51223 - "GET /api/v1/community/posts?page=1&page_size=12&topic_category=politics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60705 - "GET /api/v1/community/posts?page=1&page_size=12&topic_category=politics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61424 - "GET /api/v1/community/posts?page=1&page_size=8&topic_category=economy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62256 - "GET /api/v1/community/posts?page=1&page_size=12&topic_category=politics HTTP/1.1" 200 OK

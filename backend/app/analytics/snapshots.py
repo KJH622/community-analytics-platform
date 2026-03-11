@@ -18,28 +18,24 @@ def calculate_daily_snapshot(
             DailyMarketSentimentSnapshot.country == country,
         )
     ).scalar_one_or_none()
-    if existing:
-        return existing
 
     sentiments = db.execute(
         select(Sentiment).where(func.date(Sentiment.created_at) == snapshot_date)
     ).scalars().all()
 
     if not sentiments:
-        snapshot = DailyMarketSentimentSnapshot(
-            snapshot_date=snapshot_date,
-            country=country,
-            sentiment_score=0.0,
-            fear_greed_score=50.0,
-            hate_index=0.0,
-            uncertainty_score=0.0,
-            bullish_ratio=0.0,
-            bearish_ratio=0.0,
-            neutral_ratio=1.0,
-            top_keywords_json=[],
-            source_counts_json={},
-        )
-        db.add(snapshot)
+        snapshot = existing or DailyMarketSentimentSnapshot(snapshot_date=snapshot_date, country=country)
+        snapshot.sentiment_score = 0.0
+        snapshot.fear_greed_score = 50.0
+        snapshot.hate_index = 0.0
+        snapshot.uncertainty_score = 0.0
+        snapshot.bullish_ratio = 0.0
+        snapshot.bearish_ratio = 0.0
+        snapshot.neutral_ratio = 1.0
+        snapshot.top_keywords_json = []
+        snapshot.source_counts_json = {}
+        if existing is None:
+            db.add(snapshot)
         db.commit()
         db.refresh(snapshot)
         return snapshot
@@ -47,20 +43,18 @@ def calculate_daily_snapshot(
     count = len(sentiments)
     keywords = Counter(keyword for item in sentiments for keyword in item.keywords_json)
     biases = Counter(item.market_bias for item in sentiments)
-    snapshot = DailyMarketSentimentSnapshot(
-        snapshot_date=snapshot_date,
-        country=country,
-        sentiment_score=sum(item.sentiment_score for item in sentiments) / count,
-        fear_greed_score=sum(item.fear_greed_score for item in sentiments) / count,
-        hate_index=sum(item.hate_index for item in sentiments) / count,
-        uncertainty_score=sum(item.uncertainty_score for item in sentiments) / count,
-        bullish_ratio=biases.get("bullish", 0) / count,
-        bearish_ratio=biases.get("bearish", 0) / count,
-        neutral_ratio=biases.get("neutral", 0) / count,
-        top_keywords_json=[word for word, _ in keywords.most_common(10)],
-        source_counts_json={"documents": count},
-    )
-    db.add(snapshot)
+    snapshot = existing or DailyMarketSentimentSnapshot(snapshot_date=snapshot_date, country=country)
+    snapshot.sentiment_score = sum(item.sentiment_score for item in sentiments) / count
+    snapshot.fear_greed_score = sum(item.fear_greed_score for item in sentiments) / count
+    snapshot.hate_index = sum(item.hate_index for item in sentiments) / count
+    snapshot.uncertainty_score = sum(item.uncertainty_score for item in sentiments) / count
+    snapshot.bullish_ratio = biases.get("bullish", 0) / count
+    snapshot.bearish_ratio = biases.get("bearish", 0) / count
+    snapshot.neutral_ratio = biases.get("neutral", 0) / count
+    snapshot.top_keywords_json = [word for word, _ in keywords.most_common(10)]
+    snapshot.source_counts_json = {"documents": count}
+    if existing is None:
+        db.add(snapshot)
     db.commit()
     db.refresh(snapshot)
     return snapshot
