@@ -1,0 +1,29 @@
+{
+  "start_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+  "allowed_domains": [
+    "127.0.0.1",
+    "localhost"
+  ],
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CommunityPostScraper/1.0",
+  "delay_seconds": 0,
+  "timeout_seconds": 20,
+  "max_pages": 1,
+  "item_selector": ".post-row",
+  "link_selector": "a.post-link",
+  "link_attr": "href",
+  "fields": {
+    "rank": ".post-rank",
+    "title": ".post-title",
+    "community": ".post-community",
+    "board": ".post-board",
+    "date": ".post-date",
+    "summary": ".post-summary",
+    "stats": ".post-stats",
+    "signal": ".post-signal"
+  },
+  "pagination": {
+    "mode": "query_param",
+    "param": "page",
+    "start": 1
+  }
+}

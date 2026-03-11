@@ -18,7 +18,7 @@ export function FilterBar({ title }: FilterBarProps) {
           </select>
         </label>
         <label className="field">
-          <span>국가</span>
+          <span>구간</span>
           <select disabled defaultValue="all">
             <option value="all">전체</option>
           </select>

@@ -1,9 +1,10 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from app.collectors.base.contracts import CollectorResult
 from app.collectors.communities.dcinside import DCInsideConnector
 
-from app.models import EconomicIndicator, IndicatorRelease
+from app.models import CommunityPost, EconomicIndicator, IndicatorRelease, Sentiment, Source, SourceType
+from app.services.query import KST
 from app.politics.models import (
     PoliticalCommunitySource,
     PoliticalDailySnapshot,
@@ -149,6 +150,167 @@ def test_indicator_latest_endpoint(api_client, db_session):
     response = api_client.get("/api/v1/indicators/latest")
     assert response.status_code == 200
     assert response.json()[0]["code"] == "CPI_TEST"
+
+
+def test_hourly_comparison_endpoint(api_client, db_session, monkeypatch):
+    source = Source(
+        code="dcinside",
+        name="DCInside",
+        source_type=SourceType.COMMUNITY,
+        country="KR",
+        base_url="https://gall.dcinside.com",
+        is_official=False,
+        is_active=True,
+        compliance_notes=None,
+        metadata_json={},
+    )
+    db_session.add(source)
+    db_session.flush()
+
+    now = datetime.now(tz=timezone.utc).replace(minute=0, second=0, microsecond=0)
+    for index, hate_index in enumerate((22.0, 44.0), start=1):
+        created_at = now - timedelta(hours=2 - index)
+        post = CommunityPost(
+            source_id=source.id,
+            board_name="stockus-concept",
+            external_post_id=f"stockus:{index}",
+            title=f"post {index}",
+            body="sample body",
+            created_at=created_at,
+            author_hash=f"author-{index}",
+            view_count=10,
+            upvotes=1,
+            downvotes=0,
+            comment_count=0,
+            original_url=f"https://example.local/posts/{index}",
+            raw_payload={},
+        )
+        db_session.add(post)
+        db_session.flush()
+        db_session.add(
+            Sentiment(
+                document_type="community_post",
+                document_id=post.id,
+                sentiment_score=0.0,
+                fear_greed_score=50.0,
+                hate_index=hate_index,
+                uncertainty_score=10.0,
+                market_bias="neutral",
+                keywords_json=[],
+                entities_json=[],
+                topics_json=[],
+            )
+        )
+
+    db_session.commit()
+
+    fake_market_points = [
+        {
+            "timestamp": (now - timedelta(hours=1)).astimezone(timezone(timedelta(hours=9))).isoformat(),
+            "label": (now - timedelta(hours=1)).astimezone(KST).strftime("%m-%d %H:00"),
+            "value": 100.0,
+        },
+        {
+            "timestamp": now.astimezone(timezone(timedelta(hours=9))).isoformat(),
+            "label": now.astimezone(KST).strftime("%m-%d %H:00"),
+            "value": 101.0,
+        },
+    ]
+
+    monkeypatch.setattr(
+        "app.api.routes.analytics.fetch_intraday_index",
+        lambda symbol, limit=24: fake_market_points,
+    )
+
+    response = api_client.get("/api/v1/analytics/hourly-comparison?hours=2&board_name=stockus-concept")
+    assert response.status_code == 422
+
+    response = api_client.get("/api/v1/analytics/hourly-comparison?hours=6&board_name=stockus-concept")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["timezone"] == "Asia/Seoul"
+    assert payload["board_name"] == "stockus-concept"
+    assert len(payload["points"]) == 6
+    assert payload["points"][-1]["nasdaq_change_pct"] == 1.0
+
+
+def test_hourly_comparison_averages_hate_index_per_hour(api_client, db_session, monkeypatch):
+    source = Source(
+        code="dcinside",
+        name="DCInside",
+        source_type=SourceType.COMMUNITY,
+        country="KR",
+        base_url="https://gall.dcinside.com",
+        is_official=False,
+        is_active=True,
+        compliance_notes=None,
+        metadata_json={},
+    )
+    db_session.add(source)
+    db_session.flush()
+
+    now = datetime.now(tz=timezone.utc).replace(minute=0, second=0, microsecond=0)
+    created_at = now - timedelta(hours=1)
+
+    for index, hate_index in enumerate((10.0, 25.5), start=1):
+        post = CommunityPost(
+            source_id=source.id,
+            board_name="stockus-concept",
+            external_post_id=f"stockus:sum-{index}",
+            title=f"sum post {index}",
+            body="sample body",
+            created_at=created_at,
+            author_hash=f"sum-author-{index}",
+            view_count=10,
+            upvotes=1,
+            downvotes=0,
+            comment_count=0,
+            original_url=f"https://example.local/posts/sum-{index}",
+            raw_payload={},
+        )
+        db_session.add(post)
+        db_session.flush()
+        db_session.add(
+            Sentiment(
+                document_type="community_post",
+                document_id=post.id,
+                sentiment_score=0.0,
+                fear_greed_score=50.0,
+                hate_index=hate_index,
+                uncertainty_score=10.0,
+                market_bias="neutral",
+                keywords_json=[],
+                entities_json=[],
+                topics_json=[],
+            )
+        )
+
+    db_session.commit()
+
+    fake_market_points = [
+        {
+            "timestamp": created_at.astimezone(timezone(timedelta(hours=9))).isoformat(),
+            "label": created_at.astimezone(KST).strftime("%m-%d %H:00"),
+            "value": 100.0,
+        },
+        {
+            "timestamp": now.astimezone(timezone(timedelta(hours=9))).isoformat(),
+            "label": now.astimezone(KST).strftime("%m-%d %H:00"),
+            "value": 101.0,
+        },
+    ]
+
+    monkeypatch.setattr(
+        "app.api.routes.analytics.fetch_intraday_index",
+        lambda symbol, limit=24: fake_market_points,
+    )
+
+    response = api_client.get("/api/v1/analytics/hourly-comparison?hours=6&board_name=stockus-concept")
+
+    assert response.status_code == 200
+    payload = response.json()
+    latest_non_empty_point = next(point for point in reversed(payload["points"]) if point["post_count"] == 2)
+    assert latest_non_empty_point["hate_index"] == 17.75
 
 
 def test_politics_dashboard_endpoint(api_client, db_session):

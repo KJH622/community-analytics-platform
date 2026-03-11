@@ -1,0 +1,601 @@
+INFO:     Started server process [36844]
+INFO:     Waiting for application startup.
+2026-03-12 01:50:17,756 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:50:17,756 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:50:17,756 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:50:17,757 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:50:17,757 | INFO | apscheduler.scheduler | Scheduler started
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-03-12 01:50:30,760 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:50:30,869 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:50:31,449 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:50:31,519 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:50:34,122 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:50:47,912 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:51:35,211 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:51:36,096 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:51:45,005 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:52:06,380 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:52:51,436 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:52:52,324 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:52:59,689 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:53:51,515 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:53:58,427 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:53:59,404 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 01:54:00,887 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:54:11,473 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 01:54:22,328 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:00,004 | INFO | apscheduler.executors.default | Running job "build_scheduler.<locals>.<lambda> (trigger: cron[hour='*/1'], next run at: 2026-03-12 02:00:00 KST)" (scheduled at 2026-03-12 02:00:00+09:00)
+2026-03-12 02:00:00,005 | INFO | apscheduler.executors.default | Running job "build_scheduler.<locals>.<lambda> (trigger: cron[minute='*/30'], next run at: 2026-03-12 02:30:00 KST)" (scheduled at 2026-03-12 02:00:00+09:00)
+2026-03-12 02:00:00,005 | INFO | apscheduler.executors.default | Running job "build_scheduler.<locals>.<lambda> (trigger: cron[minute='*/20'], next run at: 2026-03-12 02:20:00 KST)" (scheduled at 2026-03-12 02:00:00+09:00)
+2026-03-12 02:00:00,190 | INFO | httpx | HTTP Request: GET https://api.frankfurter.app/latest?from=USD&to=KRW "HTTP/1.1 200 OK"
+2026-03-12 02:00:02,419 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:03,126 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:04,943 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:13,471 | ERROR | apscheduler.executors.default | Job "build_scheduler.<locals>.<lambda> (trigger: cron[minute='*/30'], next run at: 2026-03-12 02:30:00 KST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 72, in run_job
+    self._refresh_sentiments(db)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 117, in _refresh_sentiments
+    self.community_analysis.persist_post_analysis(db, row)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\community_analysis.py", line 29, in persist_post_analysis
+    self._replace_tags(db, post.id, analysis.tags)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\community_analysis.py", line 80, in _replace_tags
+    db.execute(
+    ~~~~~~~~~~^
+        delete(DocumentTag).where(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        )
+        ^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 2033, in orm_execute_statement
+    return super().orm_execute_statement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        session, statement, params, execution_options, bind_arguments, conn
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+[SQL: DELETE FROM document_tags WHERE document_tags.document_type = ? AND document_tags.document_id = ? AND document_tags.tag_type = ?]
+[parameters: ('community_post', 1, 'analysis_tag')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\jobs\scheduler.py", line 20, in <lambda>
+    scheduler.add_job(lambda: _run("collect_indicators"), CronTrigger(minute="*/30"), id="collect_indicators")
+                              ~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\jobs\scheduler.py", line 18, in _run
+    service.run_job(db, job_name)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 85, in run_job
+    db.commit()
+    ~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2030, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 1311, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 1286, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4331, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4466, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4427, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\persistence.py", line 85, in save_obj
+    _emit_update_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        update,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE ingestion_jobs SET status=? WHERE ingestion_jobs.id = ?]
+[parameters: ('FAILED', 3)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-12 02:00:14,149 | ERROR | apscheduler.executors.default | Job "build_scheduler.<locals>.<lambda> (trigger: cron[minute='*/20'], next run at: 2026-03-12 02:20:00 KST)" raised an exception
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 72, in run_job
+    self._refresh_sentiments(db)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 117, in _refresh_sentiments
+    self.community_analysis.persist_post_analysis(db, row)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\community_analysis.py", line 29, in persist_post_analysis
+    self._replace_tags(db, post.id, analysis.tags)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\community_analysis.py", line 80, in _replace_tags
+    db.execute(
+    ~~~~~~~~~~^
+        delete(DocumentTag).where(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        )
+        ^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2351, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2249, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\bulk_persistence.py", line 2033, in orm_execute_statement
+    return super().orm_execute_statement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        session, statement, params, execution_options, bind_arguments, conn
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+[SQL: DELETE FROM document_tags WHERE document_tags.document_type = ? AND document_tags.document_id = ? AND document_tags.tag_type = ?]
+[parameters: ('community_post', 1, 'analysis_tag')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: database is locked
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\apscheduler\executors\base.py", line 131, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\jobs\scheduler.py", line 21, in <lambda>
+    scheduler.add_job(lambda: _run("collect_news"), CronTrigger(minute="*/20"), id="collect_news")
+                              ~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\jobs\scheduler.py", line 18, in _run
+    service.run_job(db, job_name)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\kjh\Desktop\hate_rate\community-analytics-platform\backend\app\services\ingestion.py", line 85, in run_job
+    db.commit()
+    ~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 2030, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<string>", line 2, in commit
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 1311, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 2, in _prepare_impl
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 1286, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4331, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4466, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\session.py", line 4427, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\persistence.py", line 85, in save_obj
+    _emit_update_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        update,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\orm\persistence.py", line 912, in _emit_update_statements
+    c = connection.execute(
+        statement, multiparams, execution_options=execution_options
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1419, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\sql\elements.py", line 527, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1641, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 2363, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kjh\AppData\Local\Programs\Python\Python314\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) database is locked
+[SQL: UPDATE ingestion_jobs SET status=? WHERE ingestion_jobs.id = ?]
+[parameters: ('FAILED', 2)]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-03-12 02:00:26,443 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:29,933 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:32,482 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:34,628 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:38,978 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:41,220 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:43,806 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:46,656 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:48,917 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:51,047 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:53,748 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:00:57,847 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:00,320 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:02,520 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:04,852 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:07,455 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:09,803 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:11,811 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:13,836 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:16,273 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:18,716 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:21,615 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:24,838 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:31,293 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:34,231 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:36,310 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:38,435 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:42,184 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:44,911 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:01:45,643 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:45,895 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:01:47,484 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:48,025 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:01:48,052 | INFO | apscheduler.executors.default | Job "build_scheduler.<locals>.<lambda> (trigger: cron[hour='*/1'], next run at: 2026-03-12 03:00:00 KST)" executed successfully
+2026-03-12 02:06:44,845 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:06:45,632 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:06:47,043 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:08:51,788 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:08:52,626 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:08:54,017 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:09:16,207 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:09:37,198 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:11:03,648 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:03,716 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:04,583 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:04,602 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:30,670 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:31,477 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:11:32,261 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:12:39,911 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:12:40,728 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:12:44,474 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:14:48,743 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:14:49,733 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:15:04,754 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:15:05,808 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:15:07,964 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:07,112 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:16,607 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:16:17,588 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:16:17,893 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:28,327 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:28,773 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:29,848 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:16:51,100 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-03-12 02:17:18,905 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:17:19,957 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EIXIC?range=5d&interval=60m&includePrePost=false&events=div%2Csplits "HTTP/1.1 200 OK"
+2026-03-12 02:17:21,223 | INFO | httpx | HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"

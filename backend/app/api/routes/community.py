@@ -3,14 +3,22 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.analytics.rule_based import RuleBasedAnalyzer
 from app.collectors.communities.dcinside import DCInsideConnector
 from app.models import CommunityPost
-from app.schemas.community import CommunityPostRead
+from app.schemas.community import (
+    CommunityPostAnalysisRead,
+    CommunityPostAnalysisRequest,
+    CommunityPostRead,
+    MarketSummaryRead,
+    MarketSummaryRequest,
+)
+from app.services.community_analysis import CommunityAnalysisService
+from app.services.market_summary import MarketSummaryService
 from app.services.query import get_community_posts
 
 router = APIRouter(prefix="/api/v1/community", tags=["community"])
-analyzer = RuleBasedAnalyzer()
+analysis_service = CommunityAnalysisService()
+market_summary_service = MarketSummaryService()
 
 
 @router.get("/posts", response_model=dict)
@@ -44,6 +52,32 @@ def get_community_post(post_id: int, db: Session = Depends(get_db)):
     return _serialize_post(post)
 
 
+@router.post("/analyze", response_model=CommunityPostAnalysisRead)
+def analyze_community_post(payload: CommunityPostAnalysisRequest):
+    return CommunityPostAnalysisRead.model_validate(analysis_service.analyze_text(payload.title, payload.body).__dict__)
+
+
+@router.post("/market-summary", response_model=MarketSummaryRead)
+def generate_market_summary(payload: MarketSummaryRequest):
+    return MarketSummaryRead.model_validate(market_summary_service.generate(payload.model_dump()))
+
+
+@router.post("/reanalyze-all", response_model=dict)
+def reanalyze_all_community_posts(db: Session = Depends(get_db)):
+    processed = analysis_service.backfill_all_posts(db)
+    return {"status": "success", "records_processed": processed}
+
+
+@router.post("/reanalyze-recent", response_model=dict)
+def reanalyze_recent_community_posts(
+    db: Session = Depends(get_db),
+    limit: int = Query(default=30, ge=1, le=30),
+    board_name: str | None = None,
+):
+    processed = analysis_service.backfill_recent_posts(db, limit=limit, board_name=board_name)
+    return {"status": "success", "records_processed": processed, "limit": limit, "board_name": board_name}
+
+
 @router.post("/refresh-live", response_model=dict)
 def refresh_live_community_posts(
     db: Session = Depends(get_db),
@@ -62,6 +96,8 @@ def refresh_live_community_posts(
 
 
 def _serialize_post(post: CommunityPost) -> dict:
+    stored_analysis = analysis_service.read_stored_analysis(post)
+    analysis = stored_analysis or analysis_service.analyze_text(post.title, post.body).__dict__
     payload = CommunityPostRead.model_validate(
         {
             "id": post.id,
@@ -74,7 +110,7 @@ def _serialize_post(post: CommunityPost) -> dict:
             "downvotes": post.downvotes,
             "comment_count": post.comment_count,
             "original_url": post.original_url,
-            "analysis": analyzer.analyze(post.title, post.body).__dict__,
+            "analysis": analysis,
         }
     )
     return payload.model_dump()

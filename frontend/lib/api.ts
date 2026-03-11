@@ -28,6 +28,19 @@ async function postJson<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+async function postJsonBody<T>(path: string, body: unknown): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json() as Promise<T>;
+}
+
 export type IndicatorLatest = {
   code: string;
   name: string;
@@ -67,10 +80,12 @@ export type CommunityPost = {
   analysis?: {
     sentiment_score: number;
     fear_greed_score: number;
+    hate_score: number;
     hate_index: number;
     uncertainty_score: number;
     market_bias: string;
     keywords: string[];
+    tags: string[];
     topics: string[];
     entities: string[];
   };
@@ -95,8 +110,40 @@ export type DailySnapshot = {
   top_keywords: string[];
 };
 
+export type MarketSummary = {
+  status_label: "CALM" | "WATCH" | "HIGH";
+  summary_lines: string[];
+  analysis_note: string;
+  source: "gpt" | "fallback" | string;
+};
+
 export type KeywordTrend = { keyword: string; mentions: number };
 export type TopicBreakdown = { topic: string; documents: number };
+export type HourlyComparisonPoint = {
+  timestamp: string;
+  label: string;
+  hate_index: number | null;
+  post_count: number;
+  kospi_value: number | null;
+  kospi_change_pct: number | null;
+  nasdaq_value: number | null;
+  nasdaq_change_pct: number | null;
+};
+export type HourlyComparison = {
+  timezone: string;
+  board_name: string | null;
+  points: HourlyComparisonPoint[];
+};
+export type CommunityOverview = {
+  board_name: string | null;
+  days: number;
+  post_count: number;
+  sentiment_score: number;
+  fear_greed_score: number;
+  hate_index: number;
+  uncertainty_score: number;
+  top_keywords: string[];
+};
 export type PoliticalPost = {
   id: number;
   community_name: string;
@@ -153,16 +200,28 @@ export type PoliticsDashboard = {
 };
 
 export async function fetchDashboardData() {
-  const [indicators, news, community, sentiment, keywordTrends, topicBreakdown] = await Promise.all([
+  const [indicators, news, community, sentiment, keywordTrends, topicBreakdown, hourlyComparison, communityOverview] =
+    await Promise.all([
     getJson<IndicatorLatest[]>("/api/v1/indicators/latest"),
     getJson<{ items: NewsItem[] }>("/api/v1/news?page=1&page_size=5"),
     getJson<{ items: CommunityPost[] }>("/api/v1/community/posts?page=1&page_size=5"),
     getJson<DailySnapshot[]>("/api/v1/analytics/daily-sentiment?limit=7"),
     getJson<KeywordTrend[]>("/api/v1/analytics/keyword-trends?limit=8"),
     getJson<TopicBreakdown[]>("/api/v1/analytics/topic-breakdown"),
-  ]);
+    getJson<HourlyComparison>("/api/v1/analytics/hourly-comparison?hours=24&board_name=stockus-concept"),
+    getJson<CommunityOverview>("/api/v1/analytics/community-overview?days=1&board_name=stockus-concept"),
+    ]);
 
-  return { indicators, news: news.items, community: community.items, sentiment, keywordTrends, topicBreakdown };
+  return {
+    indicators,
+    news: news.items,
+    community: community.items,
+    sentiment,
+    keywordTrends,
+    topicBreakdown,
+    hourlyComparison,
+    communityOverview,
+  };
 }
 
 export async function fetchNews(keyword?: string) {
@@ -208,6 +267,36 @@ export async function refreshCommunityLive(boardId = "stockus", maxPosts = 10) {
   return postJson<{ status: string; board_id: string; records_processed: number; message: string }>(
     `/api/v1/community/refresh-live?${query.toString()}`
   );
+}
+
+export async function analyzeCommunityPost(payload: { title?: string; body?: string }) {
+  const response = await fetch(`${API_BASE}/api/v1/community/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-store",
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return response.json() as Promise<NonNullable<CommunityPost["analysis"]>>;
+}
+
+export async function fetchMarketSummary(payload: {
+  sentiment_score: number;
+  fear_greed_score: number;
+  hate_index: number;
+  uncertainty_score: number;
+  top_keywords: string[];
+  kospi_value?: number | null;
+  kospi_change_percent?: number | null;
+  kospi_state?: string | null;
+  nasdaq_value?: number | null;
+  nasdaq_change_percent?: number | null;
+  nasdaq_trade_date?: string | null;
+  post_count?: number;
+}) {
+  return postJsonBody<MarketSummary>("/api/v1/community/market-summary", payload);
 }
 
 export async function fetchPoliticsDashboard() {

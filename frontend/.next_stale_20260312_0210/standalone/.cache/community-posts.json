@@ -1,0 +1,122 @@
+[
+  {
+    "rank": "01",
+    "title": "NVIDIA chase-buy debate is exploding after the close",
+    "community": "Mock Finance Forum",
+    "board": "US Tech Board",
+    "date": "2026-03-11 18:32",
+    "summary": "FOMO and overheating warnings are rising at the same time after a sharp late-session move.",
+    "stats": "Views 18.2k · Likes 1.2k · Comments 604",
+    "signal": "Overheat",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/01.html"
+  },
+  {
+    "rank": "02",
+    "title": "KOSPI bounced, but users say the tape still feels heavy",
+    "community": "Mock Finance Forum",
+    "board": "Korea Stocks",
+    "date": "2026-03-11 17:58",
+    "summary": "The index is green, but traders complain that many real holdings still feel weak under the surface.",
+    "stats": "Views 15.1k · Likes 930 · Comments 420",
+    "signal": "Watch",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/02.html"
+  },
+  {
+    "rank": "03",
+    "title": "CPI preview splits the board into wait-and-see versus priced-in",
+    "community": "Mock Finance Forum",
+    "board": "Macro Desk",
+    "date": "2026-03-11 17:40",
+    "summary": "Confidence is high on both sides, but uncertainty language is still spreading across the thread.",
+    "stats": "Views 12.7k · Likes 720 · Comments 332",
+    "signal": "Neutral",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/03.html"
+  },
+  {
+    "rank": "04",
+    "title": "Nasdaq leadership keeps narrowing into AI megacaps",
+    "community": "Mock Finance Forum",
+    "board": "US Tech Board",
+    "date": "2026-03-11 17:10",
+    "summary": "AI and semiconductor names are pulling attention while the rest of the board struggles to keep up.",
+    "stats": "Views 11.4k · Likes 688 · Comments 291",
+    "signal": "Focus",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/04.html"
+  },
+  {
+    "rank": "05",
+    "title": "Volatility-buying calls rise into options expiry",
+    "community": "Mock Finance Forum",
+    "board": "Options Pit",
+    "date": "2026-03-11 16:52",
+    "summary": "VIX, hedging demand, and short-term fear are all getting more attention in the options threads.",
+    "stats": "Views 10.8k · Likes 511 · Comments 248",
+    "signal": "Alert",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/05.html"
+  },
+  {
+    "rank": "06",
+    "title": "Oil and gold strength triggers a risk-off versus inflation hedge fight",
+    "community": "Mock Finance Forum",
+    "board": "Commodities",
+    "date": "2026-03-11 16:21",
+    "summary": "Macro posters are debating whether the move is defensive positioning or a fresh inflation hedge.",
+    "stats": "Views 9.7k · Likes 402 · Comments 207",
+    "signal": "Mixed",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/06.html"
+  },
+  {
+    "rank": "07",
+    "title": "Battery sector bottom-call starts to come back",
+    "community": "Mock Finance Forum",
+    "board": "Korea Stocks",
+    "date": "2026-03-11 15:48",
+    "summary": "Users are split between rebound hopes and warnings that the move is still too early.",
+    "stats": "Views 8.9k · Likes 356 · Comments 188",
+    "signal": "Rebound",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/07.html"
+  },
+  {
+    "rank": "08",
+    "title": "Bitcoin going higher versus rejection here is the new split",
+    "community": "Mock Finance Forum",
+    "board": "Crypto Room",
+    "date": "2026-03-11 15:20",
+    "summary": "Macro risk appetite and crypto narratives are merging again in the community feed.",
+    "stats": "Views 8.1k · Likes 310 · Comments 174",
+    "signal": "Split",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/08.html"
+  },
+  {
+    "rank": "09",
+    "title": "Rate-cut hopes are back in the growth-stock narrative",
+    "community": "Mock Finance Forum",
+    "board": "US Tech Board",
+    "date": "2026-03-11 14:55",
+    "summary": "Fed language and long-end yields are once again becoming the main explanation for the move.",
+    "stats": "Views 7.6k · Likes 284 · Comments 160",
+    "signal": "Hope",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/09.html"
+  },
+  {
+    "rank": "10",
+    "title": "FX swing sparks another foreign-flow interpretation war",
+    "community": "Mock Finance Forum",
+    "board": "Macro Desk",
+    "date": "2026-03-11 14:20",
+    "summary": "Dollar direction and foreign buying are being linked aggressively, but pushback is visible too.",
+    "stats": "Views 7.1k · Likes 255 · Comments 149",
+    "signal": "Caution",
+    "source_list_url": "http://127.0.0.1:3000/community-demo/index.html?page=1",
+    "post_url": "http://127.0.0.1:3000/community-demo/posts/10.html"
+  }
+]

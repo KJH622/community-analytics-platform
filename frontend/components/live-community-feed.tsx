@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 
-import { CommunityPost, fetchCommunityLive, refreshCommunityLive } from "@/lib/api";
+import { CommunityPost, fetchCommunityLive } from "@/lib/api";
 
 type LiveCommunityFeedProps = {
   initialPosts: CommunityPost[];
@@ -28,33 +28,37 @@ export function LiveCommunityFeed({
     const refreshFeed = async () => {
       try {
         setError(null);
-        await refreshCommunityLive(boardId, Math.min(limit, 10));
         const latest = await fetchCommunityLive({ boardId, boardName, pageSize: limit });
         startTransition(() => {
           setPosts(latest.items);
           setLastUpdated(new Date());
         });
       } catch {
-        setError("실시간 개념글을 불러오지 못했습니다.");
+        setError("최신 수집 결과를 불러오지 못했습니다.");
       }
     };
 
     void refreshFeed();
     const timer = window.setInterval(() => {
       void refreshFeed();
-    }, 60_000);
+    }, 5 * 60_000);
     return () => window.clearInterval(timer);
   }, [boardId, boardName, limit, startTransition]);
+
+  const statusText = isPending ? "최신 수집 결과를 확인하는 중입니다." : "실시간 수집 결과를 반영하고 있습니다.";
+  const updatedText = lastUpdated
+    ? `${lastUpdated.toLocaleTimeString("ko-KR")} 기준 갱신`
+    : "5분 주기로 자동 갱신";
 
   if (variant === "table") {
     return (
       <div className="live-feed">
         <div className="live-feed-meta">
-          <span>{isPending ? "개념글 확인 중..." : "미국주식갤 개념글 반영"}</span>
-          <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "1분 주기 갱신"}</span>
+          <span>{statusText}</span>
+          <span>{updatedText}</span>
         </div>
         {error ? <div className="live-feed-error">{error}</div> : null}
-        <div className="community-grid" role="list" aria-label="실시간 커뮤니티 게시물 목록">
+        <div className="community-grid" role="list" aria-label="최신 수집 커뮤니티 게시물 목록">
           {posts.map((post) => {
             const analysis = getAnalysis(post);
             return (
@@ -62,7 +66,7 @@ export function LiveCommunityFeed({
                 <div className="community-card-top">
                   <div className="community-time">{formatTime(post.created_at)}</div>
                   <div className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                    혐오지수 {analysis.hate_index.toFixed(1)}
+                    혐오 지수 {analysis.hate_index.toFixed(1)}
                   </div>
                 </div>
 
@@ -73,7 +77,7 @@ export function LiveCommunityFeed({
                 <p className="community-body">{truncate(post.body, 140)}</p>
 
                 <div className="community-meters">
-                  <MetricBar label="혐오" value={analysis.hate_index} tone={getHateTone(analysis.hate_index)} />
+                  <MetricBar label="혐오" value={analysis.hate_score} tone={getHateTone(analysis.hate_score)} />
                   <MetricBar
                     label="불확실성"
                     value={analysis.uncertainty_score}
@@ -95,9 +99,9 @@ export function LiveCommunityFeed({
                   </div>
                   <div className="community-tags">
                     <span className="signal-badge">{getBiasLabel(analysis.market_bias)}</span>
-                    {analysis.keywords.slice(0, 3).map((keyword) => (
-                      <span className="keyword-chip" key={`${post.id}-${keyword}`}>
-                        {keyword}
+                    {analysis.tags.map((tag) => (
+                      <span className="keyword-chip" key={`${post.id}-${tag}`}>
+                        #{tag}
                       </span>
                     ))}
                   </div>
@@ -113,8 +117,8 @@ export function LiveCommunityFeed({
   return (
     <div className="live-feed">
       <div className="live-feed-meta">
-        <span>{isPending ? "개념글 확인 중..." : "미국주식갤 개념글 반영"}</span>
-        <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "1분 주기 갱신"}</span>
+        <span>{statusText}</span>
+        <span>{updatedText}</span>
       </div>
       {error ? <div className="live-feed-error">{error}</div> : null}
       <div className="list">
@@ -128,14 +132,15 @@ export function LiveCommunityFeed({
               <div className="list-headline">
                 <strong>{item.title}</strong>
                 <span className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                  혐오 {analysis.hate_index.toFixed(1)}
+                  혐오 지수 {analysis.hate_index.toFixed(1)}
                 </span>
               </div>
               <p>{item.body}</p>
               <div className="inline-analysis">
                 <span>{getBiasLabel(analysis.market_bias)}</span>
+                <span>혐오 {analysis.hate_score.toFixed(1)}</span>
                 <span>불확실성 {analysis.uncertainty_score.toFixed(1)}</span>
-                <span>핵심어 {analysis.keywords.slice(0, 2).join(", ") || "-"}</span>
+                <span>태그 {analysis.tags.join(", ") || "없음"}</span>
               </div>
             </a>
           );
@@ -150,7 +155,7 @@ function MetricBar({ label, value, tone }: { label: string; value: number; tone:
     <div className="metric-bar">
       <div className="metric-bar-head">
         <span>{label}</span>
-        <strong>{value.toFixed(1)}</strong>
+        <strong>{value.toFixed(1)}%</strong>
       </div>
       <div className="metric-bar-track">
         <div className={`metric-bar-fill metric-bar-fill-${tone}`} style={{ width: `${Math.max(4, value)}%` }} />
@@ -207,25 +212,26 @@ function getBiasTone(value: string) {
 
 function getBiasLabel(value: string) {
   if (value === "bullish") {
-    return "강세";
+    return "탐욕 우세";
   }
   if (value === "bearish") {
-    return "약세";
+    return "공포 우세";
   }
   return "중립";
 }
 
 function getAnalysis(post: CommunityPost) {
-  return (
-    post.analysis ?? {
-      sentiment_score: 0,
-      fear_greed_score: 50,
-      hate_index: 0,
-      uncertainty_score: 0,
-      market_bias: "neutral",
-      keywords: [],
-      topics: [],
-      entities: [],
-    }
-  );
+  return {
+    sentiment_score: 0,
+    fear_greed_score: 50,
+    hate_score: 0,
+    hate_index: 0,
+    uncertainty_score: 0,
+    market_bias: "neutral",
+    keywords: [],
+    tags: [],
+    topics: [],
+    entities: [],
+    ...post.analysis,
+  };
 }

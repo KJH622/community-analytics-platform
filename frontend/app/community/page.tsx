@@ -5,7 +5,7 @@ import { fetchCommunity, fetchDashboardData } from "@/lib/api";
 
 export default async function CommunityPage() {
   const [community, dashboard] = await Promise.all([
-    fetchCommunity({ boardName: "stockus-concept", pageSize: 20 }),
+    fetchCommunity({ boardName: "stockus-concept", pageSize: 30 }),
     fetchDashboardData(),
   ]);
 
@@ -14,12 +14,12 @@ export default async function CommunityPage() {
       <FilterBar title="Community Feed" />
       <div className="page-grid">
         <section className="panel">
-          <h2 className="panel-title">Live StockUS Concept Posts with Hate Analysis</h2>
+          <h2 className="panel-title">Latest StockUS Concept Posts with Hate Analysis</h2>
           <LiveCommunityFeed
             initialPosts={community.items}
             boardId="stockus"
             boardName="stockus-concept"
-            limit={20}
+            limit={30}
             variant="list"
           />
         </section>

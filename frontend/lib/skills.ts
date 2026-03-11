@@ -5,6 +5,7 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 const ROOT = process.cwd();
+const FRONTEND_ROOT = path.basename(ROOT).toLowerCase() === "frontend" ? ROOT : path.join(ROOT, "frontend");
 const SKILL_ROOT = "C:\\Users\\kjh\\.codex\\skills";
 
 export type SkillKospiQuote = {
@@ -33,6 +34,15 @@ export type SkillNasdaqRow = {
   diff: number;
   rate: number;
   volume: number;
+};
+
+export type SkillKospiHistoryRow = {
+  date: string;
+  close: number;
+  diff: number;
+  rate: number;
+  volume: number;
+  trade_value: number;
 };
 
 export type ScrapedCommunityPost = {
@@ -67,6 +77,18 @@ export async function fetchNasdaqFromSkill(days = 3): Promise<SkillNasdaqRow[]> 
       "--json",
     ]);
     return JSON.parse(stdout) as SkillNasdaqRow[];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchKospiHistoryFromSkill(days = 7): Promise<SkillKospiHistoryRow[]> {
+  try {
+    const { stdout } = await execFileAsync("python", [
+      path.join(FRONTEND_ROOT, "scripts", "fetch_kospi_history.py"),
+      String(days),
+    ]);
+    return JSON.parse(stdout) as SkillKospiHistoryRow[];
   } catch {
     return [];
   }

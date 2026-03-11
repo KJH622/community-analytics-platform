@@ -14,19 +14,28 @@ export function TopicDonut({ title, data }: TopicDonutProps) {
       <ReactECharts
         style={{ height: 280 }}
         option={{
-          tooltip: { trigger: "item" },
-          legend: { bottom: 0 },
+          backgroundColor: "transparent",
+          tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(15, 23, 42, 0.92)",
+            borderWidth: 0,
+            textStyle: { color: "#f8fafc" },
+          },
+          legend: {
+            bottom: 0,
+            textStyle: { color: "#5c6b80" },
+          },
           series: [
             {
               type: "pie",
               radius: ["42%", "72%"],
               data: data.map((item) => ({ name: item.topic, value: item.documents })),
               itemStyle: {
-                borderColor: "#f4efe7",
-                borderWidth: 4
-              }
-            }
-          ]
+                borderColor: "#f8fbff",
+                borderWidth: 4,
+              },
+            },
+          ],
         }}
       />
     </div>

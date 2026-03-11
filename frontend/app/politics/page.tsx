@@ -4,6 +4,8 @@ import { MetricCard } from "@/components/metric-card";
 import { TopicDonut } from "@/components/topic-donut";
 import { fetchPoliticsDashboard } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+
 export default async function PoliticsPage() {
   const data = await fetchPoliticsDashboard();
   const approval = data.indicator_cards.find((item) => item.code === "president_approval");

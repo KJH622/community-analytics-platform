@@ -14,7 +14,13 @@ class Settings(BaseSettings):
     scheduler_enabled: bool = True
     scheduler_timezone: str = "Asia/Seoul"
     api_prefix: str = "/api/v1"
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    cors_origins: list[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://0.0.0.0:3000",
+        ]
+    )
     default_user_agent: str = "market-signal-hub/0.1 (+https://example.local)"
     request_timeout_seconds: int = 20
     request_rate_limit_per_source: float = 1.0
@@ -23,6 +29,8 @@ class Settings(BaseSettings):
     fred_api_key: str | None = None
     bank_of_korea_api_key: str | None = None
     openai_api_key: str | None = None
+    openai_model: str = "gpt-4.1-mini"
+    openai_timeout_seconds: int = 30
     seed_demo_data: bool = True
 
     model_config = SettingsConfigDict(

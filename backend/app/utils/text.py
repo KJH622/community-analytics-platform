@@ -5,7 +5,7 @@ from collections import Counter
 WHITESPACE_RE = re.compile(r"\s+")
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 URL_RE = re.compile(r"https?://\S+")
-NON_WORD_RE = re.compile(r"[^\w\s가-힣]")
+NON_WORD_RE = re.compile(r"[^0-9a-zA-Z가-힣\s]")
 
 
 def normalize_whitespace(value: str) -> str:

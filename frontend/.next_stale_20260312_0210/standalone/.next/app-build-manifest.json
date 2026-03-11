@@ -1,0 +1,53 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/chunks/app/_not-found/page-211df6bac2e69ae2.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/css/a7e9c5105f0d322d.css",
+      "static/css/c8372c2eaab40bc7.css",
+      "static/chunks/app/layout-8da2b7723932b3db.js"
+    ],
+    "/community/page": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/chunks/288-19cdcc96c8adaa39.js",
+      "static/chunks/918-d1408b450c54c7fd.js",
+      "static/chunks/app/community/page-d60c66b4017f4716.js"
+    ],
+    "/news/page": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/chunks/app/news/page-b528cc2bf74afc4a.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/chunks/288-19cdcc96c8adaa39.js",
+      "static/chunks/918-d1408b450c54c7fd.js",
+      "static/chunks/app/page-c4479b8eead3852a.js"
+    ],
+    "/politics/page": [
+      "static/chunks/webpack-23373e4cda6171fb.js",
+      "static/chunks/4bd1b696-f79b623edc863262.js",
+      "static/chunks/587-3601e9a0268562c2.js",
+      "static/chunks/main-app-a3a4891ea40635e3.js",
+      "static/chunks/288-19cdcc96c8adaa39.js",
+      "static/chunks/app/politics/page-237b98b66fdd5488.js"
+    ]
+  }
+}

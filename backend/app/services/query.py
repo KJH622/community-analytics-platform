@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, defaultdict
+from datetime import UTC, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -13,6 +15,8 @@ from app.models import (
     IndicatorRelease,
     Sentiment,
 )
+
+KST = ZoneInfo("Asia/Seoul")
 
 
 def get_latest_indicators(db: Session):
@@ -60,6 +64,115 @@ def get_daily_sentiment(db: Session, limit: int = 30):
         .order_by(DailyMarketSentimentSnapshot.snapshot_date.desc())
         .limit(limit)
     ).scalars().all()
+
+
+def get_hourly_hate_index(
+    db: Session,
+    *,
+    hours: int = 24,
+    board_name: str | None = None,
+    now: datetime | None = None,
+):
+    now_kst = (now or datetime.now(tz=KST)).astimezone(KST).replace(minute=0, second=0, microsecond=0)
+    window_start_kst = now_kst - timedelta(hours=hours - 1)
+    window_start_utc = window_start_kst.astimezone(UTC)
+
+    stmt = (
+        select(CommunityPost.created_at, Sentiment.hate_index)
+        .join(
+            Sentiment,
+            (Sentiment.document_type == "community_post") & (Sentiment.document_id == CommunityPost.id),
+        )
+        .where(CommunityPost.created_at >= window_start_utc)
+    )
+    if board_name:
+        stmt = stmt.where(CommunityPost.board_name == board_name)
+
+    rows = db.execute(stmt).all()
+    buckets: dict[datetime, list[float]] = defaultdict(list)
+
+    for created_at, hate_index in rows:
+        if created_at is None or hate_index is None:
+            continue
+        observed_at = created_at
+        if observed_at.tzinfo is None:
+            observed_at = observed_at.replace(tzinfo=UTC)
+        bucket = observed_at.astimezone(KST).replace(minute=0, second=0, microsecond=0)
+        buckets[bucket].append(float(hate_index))
+
+    points = []
+    for offset in range(hours):
+        bucket = window_start_kst + timedelta(hours=offset)
+        values = buckets.get(bucket, [])
+        points.append(
+            {
+                "timestamp": bucket.isoformat(),
+                "label": bucket.strftime("%m-%d %H:00"),
+                "hate_index": round(sum(values) / len(values), 2) if values else None,
+                "post_count": len(values),
+            }
+        )
+
+    return points
+
+
+def get_community_overview(
+    db: Session,
+    *,
+    days: int = 7,
+    board_name: str | None = None,
+    now: datetime | None = None,
+):
+    now_kst = (now or datetime.now(tz=KST)).astimezone(KST)
+    window_start_utc = (now_kst - timedelta(days=days)).astimezone(UTC)
+
+    stmt = (
+        select(
+            Sentiment.sentiment_score,
+            Sentiment.fear_greed_score,
+            Sentiment.hate_index,
+            Sentiment.uncertainty_score,
+            Sentiment.keywords_json,
+        )
+        .join(
+            CommunityPost,
+            (Sentiment.document_type == "community_post") & (Sentiment.document_id == CommunityPost.id),
+        )
+        .where(CommunityPost.created_at >= window_start_utc)
+    )
+    if board_name:
+        stmt = stmt.where(CommunityPost.board_name == board_name)
+
+    rows = db.execute(stmt).all()
+    if not rows:
+        return {
+            "board_name": board_name,
+            "days": days,
+            "post_count": 0,
+            "sentiment_score": 0.0,
+            "fear_greed_score": 50.0,
+            "hate_index": 0.0,
+            "uncertainty_score": 0.0,
+            "top_keywords": [],
+        }
+
+    keyword_counter = Counter(
+        keyword
+        for _, _, _, _, keywords in rows
+        for keyword in (keywords or [])
+        if isinstance(keyword, str) and keyword.strip()
+    )
+    count = len(rows)
+    return {
+        "board_name": board_name,
+        "days": days,
+        "post_count": count,
+        "sentiment_score": round(sum(float(row[0]) for row in rows) / count, 2),
+        "fear_greed_score": round(sum(float(row[1]) for row in rows) / count, 2),
+        "hate_index": round(sum(float(row[2]) for row in rows) / count, 2),
+        "uncertainty_score": round(sum(float(row[3]) for row in rows) / count, 2),
+        "top_keywords": [keyword for keyword, _ in keyword_counter.most_common(5)],
+    }
 
 
 def get_news(db: Session, page: int, page_size: int, keyword: str | None = None):
