@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.analytics.snapshots import upsert_daily_snapshot
 from app.collectors.communities.dcinside_connector import DcInsideConnector, DcInsideGalleryConfig
 from app.collectors.communities.mock_connector import MockCommunityConnector
+from app.collectors.communities.ppomppu_connector import PpomppuBoardConfig, PpomppuHotConnector
 from app.collectors.indicators.bls import BlsIndicatorCollector
 from app.collectors.indicators.fred import FredMarketSeriesCollector
 from app.collectors.news.rss import RssNewsCollector
@@ -53,6 +54,16 @@ MARKET_GALLERIES = [
         "board_name": "나스닥 마이너 갤러리",
         "base_url": "https://gall.dcinside.com/mgallery/board/lists/?id=nasdaq",
     },
+]
+
+PPOMPPU_MARKET_BOARDS = [
+    {
+        "code": "ppomppu_stock_hot",
+        "name": "뽐뿌 증권포럼 핫글",
+        "board_id": "stock",
+        "board_name": "증권포럼 핫/인기",
+        "base_url": "https://www.ppomppu.co.kr/zboard/zboard.php?id=stock&hotlist_flag=999",
+    }
 ]
 
 POLITICAL_GALLERIES = [
@@ -255,8 +266,12 @@ def collect_dcinside_market(db: Session, job: IngestionJob) -> None:
                 gallery_id=config["gallery_id"],
                 board_name=config["board_name"],
                 community_name="디시인사이드",
-                max_pages=3,
-                limit=18,
+                max_pages=80,
+                limit=900,
+                target_days=30,
+                daily_limit=30,
+                min_view_count=20,
+                min_comment_count=1,
             )
         )
 
@@ -297,18 +312,95 @@ def collect_dcinside_market(db: Session, job: IngestionJob) -> None:
     db.commit()
 
 
+def collect_ppomppu_market_hot(db: Session, job: IngestionJob) -> None:
+    analysis_service = AnalysisService()
+    collected_boards = 0
+
+    for config in PPOMPPU_MARKET_BOARDS:
+        source = get_or_create_source(
+            db,
+            code=config["code"],
+            name=config["name"],
+            kind="community",
+            country="KR",
+            base_url=config["base_url"],
+            enabled=True,
+            robots_policy=(
+                "robots.txt allows /zboard/ pages. Use only public list/view pages and respect rate limits."
+            ),
+            tos_notes=(
+                "Use only public forum pages that are reachable without login. Re-check terms before expanding."
+            ),
+        )
+        ensure_source_connector(
+            db,
+            source,
+            connector_type="ppomppu_hot_board",
+            status="active",
+            schedule_hint="0 */3 * * *",
+            rate_limit_per_minute=60,
+            legal_notes="Public hot list/view pages only. Respect robots.txt and request pacing.",
+        )
+        collector = PpomppuHotConnector(
+            PpomppuBoardConfig(
+                board_id=config["board_id"],
+                board_name=config["board_name"],
+                community_name="뽐뿌",
+                max_pages=180,
+                target_days=30,
+                daily_limit=30,
+            )
+        )
+
+        try:
+            posts = list(collector.fetch())
+        except Exception as exc:
+            db.add(
+                IngestionLog(
+                    job_id=job.id,
+                    level="WARNING",
+                    message=f"{config['name']} 수집 실패",
+                    context={"error": str(exc), "source_code": config["code"]},
+                )
+            )
+            continue
+
+        collected_boards += 1
+        job.items_seen += len(posts)
+        for payload in posts:
+            post, created = upsert_community_post(db, source, payload)
+            if created:
+                job.items_written += 1
+            else:
+                job.items_skipped += 1
+            analysis_service.analyze_document(db, "community_post", post.id, post.title, post.body)
+
+        db.add(
+            IngestionLog(
+                job_id=job.id,
+                level="INFO",
+                message=f"{config['name']} 공개 인기글 {len(posts)}건 수집",
+                context={"source_code": config["code"]},
+            )
+        )
+
+    if collected_boards == 0:
+        raise RuntimeError("No allowed Ppomppu hot boards could be collected.")
+    db.commit()
+
+
 def compute_daily_snapshots(db: Session, job: IngestionJob) -> None:
-    for offset in range(3):
+    for offset in range(30):
         snapshot_date = date.today() - timedelta(days=offset)
         upsert_daily_snapshot(db, snapshot_date, source_kind="all")
         upsert_daily_snapshot(db, snapshot_date, source_kind="community")
-    job.items_seen = 6
-    job.items_written = 6
+    job.items_seen = 60
+    job.items_written = 60
     db.add(
         IngestionLog(
             job_id=job.id,
             level="INFO",
-            message="Updated daily sentiment snapshots for today, yesterday, and two days ago",
+            message="Updated daily sentiment snapshots for the last 30 days",
         )
     )
     db.commit()
@@ -430,16 +522,16 @@ def collect_dcinside_political_posts(db: Session, job: IngestionJob) -> None:
 
 
 def compute_political_daily_snapshots(db: Session, job: IngestionJob) -> None:
-    for offset in range(3):
+    for offset in range(30):
         snapshot_date = date.today() - timedelta(days=offset)
         update_political_daily_snapshot(db, snapshot_date)
-    job.items_seen = 3
-    job.items_written = 3
+    job.items_seen = 30
+    job.items_written = 30
     db.add(
         IngestionLog(
             job_id=job.id,
             level="INFO",
-            message="Updated political daily snapshots for today, yesterday, and two days ago",
+            message="Updated political daily snapshots for the last 30 days",
         )
     )
     db.commit()
@@ -450,6 +542,7 @@ JOB_REGISTRY = {
     "collect_news": collect_news,
     "collect_mock_community": collect_mock_community,
     "collect_dcinside_market": collect_dcinside_market,
+    "collect_ppomppu_market_hot": collect_ppomppu_market_hot,
     "compute_daily_snapshots": compute_daily_snapshots,
     "collect_political_indicators": collect_political_indicators,
     "collect_political_posts": collect_political_posts,

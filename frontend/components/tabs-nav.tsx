@@ -8,10 +8,7 @@ export function TabsNav({ activeTab }: TabsNavProps) {
       <a href="/?tab=market" className={`tab ${activeTab === "market" ? "active-market" : ""}`}>
         경제
       </a>
-      <a
-        href="/?tab=politics"
-        className={`tab ${activeTab === "politics" ? "active-politics" : ""}`}
-      >
+      <a href="/?tab=politics" className={`tab ${activeTab === "politics" ? "active-politics" : ""}`}>
         정치
       </a>
     </div>

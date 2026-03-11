@@ -7,9 +7,23 @@
    - Network:      http://127.0.0.1:3000
 
  ✓ Starting...
- ✓ Ready in 2.6s
+
+   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+   The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+   	- include was updated to add '.next-runtime/types/**/*.ts'
+
+ ✓ Ready in 2.3s
  ○ Compiling / ...
- ✓ Compiled / in 2.1s (1582 modules)
- GET / 200 in 3437ms
- GET / 200 in 297ms
- GET / 200 in 270ms
+ ✓ Compiled / in 8.5s (1596 modules)
+ HEAD / 500 in 9363ms
+ ✓ Compiled in 479ms (840 modules)
+ HEAD / 200 in 766ms
+ GET / 200 in 282ms
+ ✓ Compiled in 563ms (840 modules)
+ GET / 200 in 315ms
+ ✓ Compiled in 363ms (840 modules)
+ GET / 200 in 238ms
+ HEAD / 200 in 882ms
+ GET / 200 in 486ms
+ GET / 200 in 799ms

@@ -9,7 +9,12 @@ from app.models.community import CommunityPost
 from app.models.reference import DocumentTag, Source
 from app.models.sentiment import Sentiment
 from app.schemas.community import CommunityPostListResponse, CommunityPostRead
-from app.services.content_filters import classify_market_post, compute_market_influence_score
+from app.services.content_filters import (
+    classify_market_emotional_signal,
+    classify_market_post,
+    compute_market_influence_score,
+    explain_market_influence,
+)
 
 
 router = APIRouter()
@@ -26,6 +31,7 @@ def list_community_posts(
     topic: str | None = None,
     sentiment: str | None = None,
     exclude_notice_like: bool = Query(default=True),
+    only_emotional: bool = Query(default=True),
     sort: str = Query(default="recent", pattern="^(recent|influence)$"),
     db: Session = Depends(get_db),
 ) -> CommunityPostListResponse:
@@ -65,12 +71,19 @@ def list_community_posts(
     for post in posts:
         sentiment_row = sentiment_map.get(post.id)
         classification = classify_market_post(post.title, post.body)
+        emotional_signal = classify_market_emotional_signal(
+            title=post.title,
+            body=post.body,
+            sentiment=sentiment_row,
+        )
 
         if sentiment == "positive" and (sentiment_row is None or sentiment_row.sentiment_score < 0):
             continue
         if sentiment == "negative" and (sentiment_row is None or sentiment_row.sentiment_score >= 0):
             continue
         if exclude_notice_like and classification.excluded:
+            continue
+        if only_emotional and not emotional_signal.included:
             continue
 
         items.append(
@@ -95,7 +108,18 @@ def list_community_posts(
                 market_bias=sentiment_row.market_bias if sentiment_row else None,
                 analytics_excluded=classification.excluded,
                 exclusion_reasons=classification.reasons,
+                emotional_signal=emotional_signal.included,
+                emotional_reasons=emotional_signal.reasons,
                 influence_score=compute_market_influence_score(
+                    sentiment=sentiment_row,
+                    title=post.title,
+                    body=post.body,
+                    view_count=post.view_count,
+                    upvotes=post.upvotes,
+                    comment_count=post.comment_count,
+                    published_at=post.published_at,
+                ),
+                influence_reason=explain_market_influence(
                     sentiment=sentiment_row,
                     title=post.title,
                     body=post.body,
@@ -137,6 +161,11 @@ def get_community_post(post_id: int, db: Session = Depends(get_db)) -> Community
         )
     )
     classification = classify_market_post(post.title, post.body)
+    emotional_signal = classify_market_emotional_signal(
+        title=post.title,
+        body=post.body,
+        sentiment=sentiment_row,
+    )
     return CommunityPostRead(
         id=post.id,
         source_id=post.source_id,
@@ -158,7 +187,18 @@ def get_community_post(post_id: int, db: Session = Depends(get_db)) -> Community
         market_bias=sentiment_row.market_bias if sentiment_row else None,
         analytics_excluded=classification.excluded,
         exclusion_reasons=classification.reasons,
+        emotional_signal=emotional_signal.included,
+        emotional_reasons=emotional_signal.reasons,
         influence_score=compute_market_influence_score(
+            sentiment=sentiment_row,
+            title=post.title,
+            body=post.body,
+            view_count=post.view_count,
+            upvotes=post.upvotes,
+            comment_count=post.comment_count,
+            published_at=post.published_at,
+        ),
+        influence_reason=explain_market_influence(
             sentiment=sentiment_row,
             title=post.title,
             body=post.body,

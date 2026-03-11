@@ -24,7 +24,10 @@ class CommunityPostRead(ORMModel):
     market_bias: str | None = None
     analytics_excluded: bool = False
     exclusion_reasons: list[str] | None = None
+    emotional_signal: bool = False
+    emotional_reasons: list[str] | None = None
     influence_score: float | None = None
+    influence_reason: str | None = None
 
 
 class CommunityPostListResponse(ORMModel):

@@ -92,6 +92,12 @@ class ContentFilterResult:
     reasons: list[str]
 
 
+@dataclass(slots=True)
+class EmotionalSignalResult:
+    included: bool
+    reasons: list[str]
+
+
 def classify_market_post(title: str, body: str | None = None) -> ContentFilterResult:
     return _classify_post(
         title=title,
@@ -108,6 +114,36 @@ def classify_political_post(title: str, body: str | None = None) -> ContentFilte
         info_terms=POLITICAL_INFO_TERMS,
         emotion_terms=POLITICAL_EMOTION_TERMS,
     )
+
+
+def classify_market_emotional_signal(
+    *,
+    title: str,
+    body: str | None,
+    sentiment: Sentiment | None,
+) -> EmotionalSignalResult:
+    text = f"{title} {body or ''}".lower()
+    reasons: list[str] = []
+
+    if sentiment is not None:
+        if abs(sentiment.sentiment_score) >= 8:
+            reasons.append("sentiment_strength")
+        if abs(sentiment.fear_greed_score - 50.0) >= 8:
+            reasons.append("fear_greed_shift")
+        if sentiment.hate_index >= 8:
+            reasons.append("hate_expression")
+        if sentiment.uncertainty_score >= 8:
+            reasons.append("uncertainty_expression")
+
+    emotion_hits = _term_hits(text, MARKET_EMOTION_TERMS)
+    if emotion_hits >= 1:
+        reasons.append("emotion_terms")
+
+    short_reaction = len(text.strip()) <= 4
+    if not reasons and short_reaction:
+        reasons.append("too_short")
+
+    return EmotionalSignalResult(included="too_short" not in reasons and len(reasons) > 0, reasons=reasons)
 
 
 def compute_market_influence_score(
@@ -138,6 +174,48 @@ def compute_market_influence_score(
             + text_heat
         )
     return round(reaction * recency * (1.0 + min(emotion, 100.0) / 115.0), 2)
+
+
+def explain_market_influence(
+    *,
+    sentiment: Sentiment | None,
+    title: str,
+    body: str | None,
+    view_count: int | None,
+    upvotes: int | None,
+    comment_count: int | None,
+    published_at: datetime | None,
+) -> str:
+    reasons: list[str] = []
+    text = f"{title} {body or ''}".lower()
+
+    if (view_count or 0) >= 50:
+        reasons.append(f"조회수 {view_count}회로 반응이 컸음")
+    if (comment_count or 0) >= 5:
+        reasons.append(f"댓글 {comment_count}개로 토론이 붙었음")
+    if (upvotes or 0) >= 3:
+        reasons.append(f"추천 {upvotes}개로 주목도가 높았음")
+
+    emotion_terms = [term for term in MARKET_EMOTION_TERMS if term in text][:2]
+    if emotion_terms:
+        reasons.append(f"'{', '.join(emotion_terms)}' 같은 감정 표현이 포함됨")
+
+    if sentiment is not None:
+        if abs(sentiment.sentiment_score) >= 12:
+            reasons.append(f"긍부정 점수 {round(sentiment.sentiment_score, 1)}로 방향성이 뚜렷함")
+        if abs(sentiment.fear_greed_score - 50.0) >= 12:
+            reasons.append(
+                f"공포/탐욕 점수 {round(sentiment.fear_greed_score, 1)}로 심리 쏠림이 있음"
+            )
+        if sentiment.hate_index >= 10:
+            reasons.append(f"혐오 지수 {round(sentiment.hate_index, 1)}로 공격성이 감지됨")
+        if sentiment.uncertainty_score >= 10:
+            reasons.append(f"불확실성 지수 {round(sentiment.uncertainty_score, 1)}로 흔들림이 보임")
+
+    if published_at is not None and _recency_multiplier(published_at) >= 1.0:
+        reasons.append("최근 글이라 현재 분위기에 직접 영향을 줌")
+
+    return " / ".join(reasons[:3]) if reasons else "반응량은 있었지만 감정 신호는 약한 글"
 
 
 def compute_political_influence_score(

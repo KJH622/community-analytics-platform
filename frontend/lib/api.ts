@@ -64,7 +64,10 @@ export type CommunityPost = {
   market_bias?: string | null;
   analytics_excluded?: boolean;
   exclusion_reasons?: string[] | null;
+  emotional_signal?: boolean;
+  emotional_reasons?: string[] | null;
   influence_score?: number | null;
+  influence_reason?: string | null;
 };
 
 export type PoliticalDashboard = {
@@ -146,7 +149,7 @@ async function fetchJSON<T>(path: string): Promise<T> {
 export async function getMarketDashboardData() {
   const [indicators, snapshots, keywords, topics, news] = await Promise.all([
     fetchJSON<Indicator[]>("/api/v1/indicators/latest"),
-    fetchJSON<DailySnapshot[]>("/api/v1/analytics/daily-sentiment?source_kind=community&limit=7"),
+    fetchJSON<DailySnapshot[]>("/api/v1/analytics/daily-sentiment?source_kind=community&limit=30"),
     fetchJSON<KeywordTrend[]>("/api/v1/analytics/keyword-trends?limit=12"),
     fetchJSON<TopicBreakdown[]>("/api/v1/analytics/topic-breakdown"),
     fetchJSON<{ items: NewsItem[] }>("/api/v1/news?limit=6"),
@@ -157,10 +160,10 @@ export async function getMarketDashboardData() {
 
 export async function getKoreanMarketCommunityPosts(limit = 12) {
   const dateFrom = new Date();
-  dateFrom.setDate(dateFrom.getDate() - 2);
+  dateFrom.setDate(dateFrom.getDate() - 29);
   const dateString = dateFrom.toISOString().slice(0, 10);
   return fetchJSON<{ items: CommunityPost[]; total: number }>(
-    `/api/v1/community/posts?source=dcinside_stockus,dcinside_nasdaq&limit=${limit}&sort=influence&date_from=${dateString}`
+    `/api/v1/community/posts?source=ppomppu_stock_hot&limit=${limit}&sort=influence&date_from=${dateString}&only_emotional=true`
   );
 }
 

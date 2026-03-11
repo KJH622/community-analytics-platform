@@ -11,7 +11,7 @@ from app.models.article import Article
 from app.models.community import CommunityPost
 from app.models.reference import DocumentTag
 from app.models.sentiment import DailyMarketSentimentSnapshot, Sentiment
-from app.services.content_filters import classify_market_post
+from app.services.content_filters import classify_market_emotional_signal, classify_market_post
 
 
 @dataclass(slots=True)
@@ -73,7 +73,13 @@ def compute_snapshot_for_date(
     filtered_post_pairs = [
         (post, post_sentiment_map[post.id])
         for post in community_for_day
-        if post.id in post_sentiment_map and not classify_market_post(post.title, post.body).excluded
+        if post.id in post_sentiment_map
+        and not classify_market_post(post.title, post.body).excluded
+        and classify_market_emotional_signal(
+            title=post.title,
+            body=post.body,
+            sentiment=post_sentiment_map[post.id],
+        ).included
     ]
 
     selected_sentiments: list[Sentiment] = []

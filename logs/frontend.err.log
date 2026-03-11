@@ -1,1 +1,12 @@
-^C
+ ⨯ Error: API request failed: /api/v1/community/posts?source=dcinside_stockus,dcinside_nasdaq&limit=300&sort=influence&date_from=2026-02-10&only_emotional=true
+    at fetchJSON (lib\api.ts:144:11)
+    at async MarketTab (app\page.tsx:67:42)
+  142 |   const response = await fetch(`${API_BASE_URL}${path}`, { cache: "no-store" });
+  143 |   if (!response.ok) {
+> 144 |     throw new Error(`API request failed: ${path}`);
+      |           ^
+  145 |   }
+  146 |   return (await response.json()) as T;
+  147 | } {
+  digest: '761850011'
+}

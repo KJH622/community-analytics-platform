@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable
+from collections import defaultdict
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any
 from urllib.parse import parse_qs, urljoin, urlparse
 
@@ -27,6 +28,10 @@ class DcInsideGalleryConfig:
     page: int = 1
     max_pages: int = 1
     limit: int = 12
+    target_days: int = 30
+    daily_limit: int = 30
+    min_view_count: int = 20
+    min_comment_count: int = 1
 
 
 def extract_numeric(value: str | None) -> int | None:
@@ -103,10 +108,42 @@ class DcInsideConnector(BaseCommunityConnector):
                         "list_date": _text(row.select_one("td.gall_date")),
                         "list_view_count": extract_numeric(_text(row.select_one("td.gall_count"))),
                         "list_upvotes": extract_numeric(_text(row.select_one("td.gall_recommend"))),
+                        "list_comment_count": extract_numeric(_text(row.select_one("td.gall_reply_num"))),
                     }
                 )
                 if len(posts) >= self.config.limit:
                     return posts
+
+        return posts
+
+    def fetch(self) -> Iterable[NormalizedCommunityPost]:
+        daily_counts: dict[str, int] = defaultdict(int)
+        posts: list[NormalizedCommunityPost] = []
+        cutoff = datetime.now() - timedelta(days=max(self.config.target_days - 1, 0))
+
+        for item in self.fetch_posts_page():
+            if not self._looks_like_hot_post(item):
+                continue
+
+            detail = self.fetch_post_detail(item)
+            parsed = self.parse_post(detail)
+            published_at = parsed.get("published_at")
+            if published_at is None:
+                continue
+            if published_at < cutoff:
+                continue
+
+            day_key = published_at.date().isoformat()
+            if daily_counts[day_key] >= self.config.daily_limit:
+                continue
+
+            posts.append(self.normalize_post(parsed))
+            daily_counts[day_key] += 1
+
+            if len(daily_counts) >= self.config.target_days and all(
+                count >= self.config.daily_limit for count in daily_counts.values()
+            ):
+                break
 
         return posts
 
@@ -149,6 +186,16 @@ class DcInsideConnector(BaseCommunityConnector):
             comment_count=payload["comment_count"],
             url=payload["url"],
             raw_payload=payload,
+        )
+
+    def _looks_like_hot_post(self, item: dict[str, Any]) -> bool:
+        views = item.get("list_view_count") or 0
+        upvotes = item.get("list_upvotes") or 0
+        comments = item.get("list_comment_count") or 0
+        return (
+            views >= self.config.min_view_count
+            or comments >= self.config.min_comment_count
+            or upvotes >= 1
         )
 
 

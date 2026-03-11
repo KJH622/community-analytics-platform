@@ -2,9 +2,11 @@ from datetime import datetime, timezone
 
 from app.models.sentiment import Sentiment
 from app.services.content_filters import (
+    classify_market_emotional_signal,
     classify_market_post,
     classify_political_post,
     compute_market_influence_score,
+    explain_market_influence,
 )
 
 
@@ -41,3 +43,36 @@ def test_market_influence_score_rewards_emotional_recent_posts():
         published_at=datetime.now(timezone.utc),
     )
     assert score > 0
+
+
+def test_market_emotional_signal_filters_out_flat_text():
+    result = classify_market_emotional_signal(
+        title="오늘 장 마감 시간 공지",
+        body="운영 안내",
+        sentiment=None,
+    )
+    assert result.included is False
+
+
+def test_market_influence_reason_explains_reaction_and_emotion():
+    sentiment = Sentiment(
+        document_type="community_post",
+        document_id=1,
+        sentiment_score=-28,
+        fear_greed_score=26,
+        hate_index=14,
+        uncertainty_score=18,
+        market_bias="bearish",
+        labels=["fear"],
+        keywords=["폭락"],
+    )
+    reason = explain_market_influence(
+        sentiment=sentiment,
+        title="오늘 진짜 폭락이다",
+        body="패닉이다 손절 나왔다",
+        view_count=900,
+        upvotes=12,
+        comment_count=15,
+        published_at=datetime.now(timezone.utc),
+    )
+    assert "조회수" in reason or "공포/탐욕" in reason or "감정 표현" in reason
