@@ -1,8 +1,9 @@
 import { ChartPanel } from "@/components/chart-panel";
 import { DomainTabs } from "@/components/domain-tabs";
 import { LiveCommunityFeed } from "@/components/live-community-feed";
+import { MarketComparisonChart } from "@/components/market-comparison-chart";
 import { MetricCard } from "@/components/metric-card";
-import { fetchCommunity, fetchDashboardData } from "@/lib/api";
+import { fetchCommunity, fetchDashboardData, fetchMarketComparison } from "@/lib/api";
 
 function formatNumber(value: number | null | undefined, digits = 1) {
   if (value == null) {
@@ -11,19 +12,27 @@ function formatNumber(value: number | null | undefined, digits = 1) {
   return value.toFixed(digits);
 }
 
+function formatSignedPercent(value: number | null | undefined) {
+  if (value == null) {
+    return "-";
+  }
+  return `${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
+}
+
 export default async function DashboardPage() {
-  const [data, community] = await Promise.all([
+  const [data, community, market] = await Promise.all([
     fetchDashboardData(),
     fetchCommunity({ topicCategory: "economy", pageSize: 8 }),
+    fetchMarketComparison(14),
   ]);
 
   const latest = data.sentiment[0] ?? null;
   const latestIndicator = data.indicators.find((item) => item.latest_release) ?? null;
-  const topKeywords = latest?.top_keywords?.slice(0, 4).join(", ") || "No daily keywords yet";
+  const topKeywords = latest?.top_keywords?.slice(0, 4).join(", ") || "데이터 집계 중";
   const summaryLines = [
-    `Current daily sentiment is ${formatNumber(latest?.sentiment_score)}.`,
-    `Hate index is ${formatNumber(latest?.hate_index)} and uncertainty is ${formatNumber(latest?.uncertainty_score)}.`,
-    `Top keywords today: ${topKeywords}.`,
+    `경제 커뮤니티 종합 감정 점수는 ${formatNumber(latest?.sentiment_score)}입니다.`,
+    `현재 혐오지수는 ${formatNumber(market.latest.hate_index)}이며 전일 대비 ${formatNumber(market.latest.hate_change)}p 변화했습니다.`,
+    `오늘 많이 언급된 키워드는 ${topKeywords} 입니다.`,
   ];
 
   return (
@@ -32,52 +41,52 @@ export default async function DashboardPage() {
 
       <section className="hero-grid">
         <article className="feature-panel">
-          <span className="section-label">Market Snapshot</span>
+          <span className="section-label">경제 대시보드</span>
           <div className="headline">
             <div>
-              <h1>Community-driven market view</h1>
-              <p>Economic community posts, analytics snapshots, and headline data in one place.</p>
+              <h1>경제 커뮤니티와 시장 흐름</h1>
+              <p>저장된 경제 게시글 감정과 실제 한국 시장 지표를 한 화면에서 같이 봅니다.</p>
             </div>
-            <p>Updated from the crawler pipeline every hour.</p>
+            <p>크롤링과 집계는 1시간 주기로 갱신됩니다.</p>
           </div>
 
           <div className="card-grid">
             <MetricCard
-              label="Daily Sentiment"
-              value={formatNumber(latest?.sentiment_score)}
-              caption="Average score from the latest daily snapshot"
+              label="코스피"
+              value={formatNumber(market.latest.kospi_close, 2)}
+              caption={`전일 대비 ${formatSignedPercent(market.latest.kospi_change_pct)}`}
             />
             <MetricCard
-              label="Fear / Greed"
-              value={formatNumber(latest?.fear_greed_score)}
-              caption="Market emotion balance across stored posts"
+              label="코스닥"
+              value={formatNumber(market.latest.kosdaq_close, 2)}
+              caption={`전일 대비 ${formatSignedPercent(market.latest.kosdaq_change_pct)}`}
             />
             <MetricCard
-              label="Hate Index"
-              value={formatNumber(latest?.hate_index)}
-              caption="Aggression and hostility detected in the feed"
+              label="경제 혐오지수"
+              value={formatNumber(market.latest.hate_index, 2)}
+              caption={`전일 대비 ${formatNumber(market.latest.hate_change, 2)}p`}
             />
             <MetricCard
-              label="Latest Indicator"
+              label="최신 경제 지표"
               value={latestIndicator?.latest_release?.actual_value?.toString() ?? "-"}
-              caption={latestIndicator ? `${latestIndicator.name} (${latestIndicator.country})` : "No indicator release yet"}
+              caption={latestIndicator ? `${latestIndicator.name} (${latestIndicator.country})` : "표시할 지표가 아직 없습니다."}
             />
           </div>
         </article>
 
         <aside className="summary-panel">
-          <span className="section-label">3-Line Summary</span>
+          <span className="section-label">오늘 요약</span>
           <div className="headline compact">
             <div>
-              <h2>Today at a glance</h2>
-              <p>A fast read on how the community feed is moving right now.</p>
+              <h2>경제 분위기 한눈에 보기</h2>
+              <p>경제 커뮤니티 반응과 시장 흐름을 빠르게 읽을 수 있도록 정리했습니다.</p>
             </div>
           </div>
 
           <section className="score-box">
-            <span>Alert level</span>
-            <strong>{(latest?.hate_index ?? 0) >= 40 ? "HIGH" : "WATCH"}</strong>
-            <small>Use this as a quick proxy before deeper sentiment analysis runs.</small>
+            <span>경계 수준</span>
+            <strong>{(latest?.hate_index ?? 0) >= 40 ? "높음" : "관찰"}</strong>
+            <small>감정 급등 여부를 가장 빠르게 확인하는 보조 지표입니다.</small>
           </section>
 
           <div className="summary-lines">
@@ -89,19 +98,30 @@ export default async function DashboardPage() {
           </div>
 
           <div className="layout-note">
-            This dashboard is reading from the crawler database, not scraping the community live on every page request.
+            아래 비교 그래프는 코스피, 코스닥, 혐오지수를 같은 구간에서 0~100으로 정규화해 추세 유사성을 보기 쉽게 만든 것입니다.
           </div>
         </aside>
       </section>
 
-      <section className="feed-panel">
-        <span className="section-label">Economy Feed</span>
+      <section className="panel">
         <div className="headline">
           <div>
-            <h2>Latest economy community posts</h2>
-            <p>Posts are already stored in the database and refreshed on a one-minute UI polling loop.</p>
+            <h2>코스피 · 코스닥 · 혐오지수 추세 비교</h2>
+            <p>세 지표를 한 그래프에서 정규화해서 움직임이 비슷한지 비교합니다.</p>
           </div>
-          <p>{community.total} stored economy posts</p>
+          <p>{market.comparison_basis}</p>
+        </div>
+        <MarketComparisonChart data={market.points} />
+      </section>
+
+      <section className="feed-panel">
+        <span className="section-label">경제 커뮤니티 글</span>
+        <div className="headline">
+          <div>
+            <h2>최신 경제 게시글</h2>
+            <p>크롤 서버가 저장한 경제 게시글을 바로 보여줍니다.</p>
+          </div>
+          <p>누적 {community.total}건</p>
         </div>
 
         <LiveCommunityFeed initialPosts={community.items} topicCategory="economy" limit={8} variant="table" />
@@ -109,7 +129,7 @@ export default async function DashboardPage() {
 
       <section className="lower-grid">
         <ChartPanel
-          title="Sentiment Trend"
+          title="경제 감정 추이"
           data={data.sentiment.map((item) => ({
             label: item.snapshot_date.slice(5),
             value: item.sentiment_score,
@@ -117,7 +137,7 @@ export default async function DashboardPage() {
         />
 
         <ChartPanel
-          title="Keyword Trend"
+          title="핵심 키워드 추이"
           color="#285f4b"
           data={data.keywordTrends.map((item) => ({ label: item.keyword, value: item.mentions }))}
         />

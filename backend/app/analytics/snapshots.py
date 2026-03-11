@@ -3,10 +3,10 @@ from __future__ import annotations
 from collections import Counter
 from datetime import date
 
-from sqlalchemy import func, select
+from sqlalchemy import and_, func, select
 from sqlalchemy.orm import Session
 
-from app.models import DailyMarketSentimentSnapshot, Sentiment
+from app.models import Article, CommunityPost, DailyMarketSentimentSnapshot, Sentiment
 
 
 def calculate_daily_snapshot(
@@ -19,9 +19,23 @@ def calculate_daily_snapshot(
         )
     ).scalar_one_or_none()
 
-    sentiments = db.execute(
-        select(Sentiment).where(func.date(Sentiment.created_at) == snapshot_date)
+    article_sentiments = db.execute(
+        select(Sentiment)
+        .join(
+            Article,
+            and_(Sentiment.document_type == "article", Sentiment.document_id == Article.id),
+        )
+        .where(func.date(Article.published_at) == snapshot_date)
     ).scalars().all()
+    community_sentiments = db.execute(
+        select(Sentiment)
+        .join(
+            CommunityPost,
+            and_(Sentiment.document_type == "community_post", Sentiment.document_id == CommunityPost.id),
+        )
+        .where(func.date(CommunityPost.created_at) == snapshot_date)
+    ).scalars().all()
+    sentiments = [*article_sentiments, *community_sentiments]
 
     if not sentiments:
         snapshot = existing or DailyMarketSentimentSnapshot(snapshot_date=snapshot_date, country=country)

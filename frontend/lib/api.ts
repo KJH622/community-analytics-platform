@@ -104,6 +104,33 @@ export type DailySnapshot = {
 
 export type KeywordTrend = { keyword: string; mentions: number };
 export type TopicBreakdown = { topic: string; documents: number };
+
+export type MarketComparisonLatest = {
+  kospi_close: number | null;
+  kosdaq_close: number | null;
+  kospi_change_pct: number | null;
+  kosdaq_change_pct: number | null;
+  hate_index: number | null;
+  hate_change: number | null;
+};
+
+export type MarketComparisonPoint = {
+  date: string;
+  kospi_close: number | null;
+  kosdaq_close: number | null;
+  hate_index: number;
+  kospi_scaled: number;
+  kosdaq_scaled: number;
+  hate_scaled: number;
+};
+
+export type MarketComparison = {
+  reference_date: string | null;
+  comparison_basis: string;
+  latest: MarketComparisonLatest;
+  points: MarketComparisonPoint[];
+};
+
 export type PoliticsSummary = {
   reference_date: string | null;
   post_count: number;
@@ -258,6 +285,35 @@ export async function fetchCommunityLive(query: CommunityQuery = {}) {
   return getJson<PageResponse<CommunityPost>>(`/api/v1/community/posts?${parts.join("&")}`, "no-store").catch(() =>
     emptyPage<CommunityPost>(pageSize)
   );
+}
+
+const emptyMarketComparison: MarketComparison = {
+  reference_date: null,
+  comparison_basis: "최근 구간 0~100 정규화",
+  latest: {
+    kospi_close: null,
+    kosdaq_close: null,
+    kospi_change_pct: null,
+    kosdaq_change_pct: null,
+    hate_index: null,
+    hate_change: null,
+  },
+  points: [],
+};
+
+export async function fetchMarketComparison(days = 14) {
+  const payload = await getJson<Partial<MarketComparison>>(`/api/v1/market/comparison?days=${days}`, "no-store").catch(
+    () => ({})
+  );
+  return {
+    ...emptyMarketComparison,
+    ...payload,
+    latest: {
+      ...emptyMarketComparison.latest,
+      ...(payload.latest ?? {}),
+    },
+    points: payload.points ?? emptyMarketComparison.points,
+  };
 }
 
 const emptyPoliticsDashboard: PoliticsDashboard = {

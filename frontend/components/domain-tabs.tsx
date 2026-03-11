@@ -9,10 +9,10 @@ export function DomainTabs({ active }: DomainTabsProps) {
     <div className="panel" style={{ marginTop: 22, padding: 10 }}>
       <div className="tag-row">
         <Link className="tag" data-active={active === "market"} href="/">
-          Market
+          경제
         </Link>
         <Link className="tag" data-active={active === "politics"} href="/politics">
-          Politics
+          정치
         </Link>
       </div>
     </div>

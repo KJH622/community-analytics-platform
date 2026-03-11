@@ -8,6 +8,7 @@ from app.api.routes.community import router as community_router
 from app.api.routes.health import router as health_router
 from app.api.routes.indicators import router as indicators_router
 from app.api.routes.jobs import router as jobs_router
+from app.api.routes.market import router as market_router
 from app.api.routes.news import router as news_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -49,5 +50,6 @@ app.include_router(indicators_router)
 app.include_router(news_router)
 app.include_router(community_router)
 app.include_router(analytics_router)
+app.include_router(market_router)
 app.include_router(jobs_router)
 app.include_router(politics_router)

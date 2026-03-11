@@ -1,9 +1,11 @@
-INFO:     Started server process [42336]
+INFO:     Started server process [27516]
 INFO:     Waiting for application startup.
-2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 01:06:53,327 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 01:06:53,327 | INFO | apscheduler.scheduler | Scheduler started
+2026-03-12 02:07:11,198 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 02:07:11,199 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 02:07:11,199 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 02:07:11,200 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 02:07:11,201 | INFO | apscheduler.scheduler | Scheduler started
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+2026-03-12 02:07:49,037 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKS11?range=3mo&interval=1d "HTTP/1.1 200 OK"
+2026-03-12 02:07:49,770 | INFO | httpx | HTTP Request: GET https://query1.finance.yahoo.com/v8/finance/chart/%5EKQ11?range=3mo&interval=1d "HTTP/1.1 200 OK"

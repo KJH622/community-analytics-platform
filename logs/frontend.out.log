@@ -52,3 +52,22 @@
  GET /politics 200 in 596ms
  GET /politics 200 in 798ms
  GET /politics 200 in 649ms
+ GET / 200 in 77ms
+ GET / 200 in 39ms
+ ✓ Compiled in 5.3s (1903 modules)
+ GET / 200 in 588ms
+ ✓ Compiled in 1117ms (1903 modules)
+ GET / 200 in 183ms
+ GET / 200 in 2532ms
+ ✓ Compiled in 505ms (992 modules)
+ GET / 200 in 189ms
+ GET / 200 in 677ms
+ GET /politics 200 in 978ms
+ GET / 200 in 187ms
+ ✓ Compiled in 1194ms (1903 modules)
+ GET / 200 in 180ms
+ ✓ Compiled in 607ms (1903 modules)
+ GET / 200 in 201ms
+ GET / 200 in 951ms
+ GET / 200 in 127ms
+ GET / 200 in 182ms
