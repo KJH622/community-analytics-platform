@@ -1,0 +1,81 @@
+{
+  "values": [
+    {
+      "indicator_code": "KR_PRESIDENT_APPROVAL",
+      "indicator_name": "대통령 지지율",
+      "country": "KR",
+      "date": "2026-01-01",
+      "value": 41.2,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "overall",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_PRESIDENT_APPROVAL",
+      "indicator_name": "대통령 지지율",
+      "country": "KR",
+      "date": "2026-02-01",
+      "value": 42.6,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "overall",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_PRESIDENT_APPROVAL",
+      "indicator_name": "대통령 지지율",
+      "country": "KR",
+      "date": "2026-03-01",
+      "value": 39.8,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "overall",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_PARTY_APPROVAL",
+      "indicator_name": "정당 지지율",
+      "country": "KR",
+      "date": "2026-03-01",
+      "value": 36.4,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "국민의힘",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_PARTY_APPROVAL",
+      "indicator_name": "정당 지지율",
+      "country": "KR",
+      "date": "2026-03-01",
+      "value": 38.1,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "더불어민주당",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_ELECTION_CANDIDATE_SUPPORT",
+      "indicator_name": "대선 후보 지지율",
+      "country": "KR",
+      "date": "2026-03-01",
+      "value": 31.4,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "이재명",
+      "description": "MVP fixture data. Replace with approved polling source."
+    },
+    {
+      "indicator_code": "KR_ELECTION_CANDIDATE_SUPPORT",
+      "indicator_name": "대선 후보 지지율",
+      "country": "KR",
+      "date": "2026-03-01",
+      "value": 29.5,
+      "source": "Mock Polling Dataset",
+      "unit": "%",
+      "label": "한동훈",
+      "description": "MVP fixture data. Replace with approved polling source."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "posts": [
+    {
+      "community_name": "정치토론 커뮤니티",
+      "board_name": "대선 게시판",
+      "external_id": "pol-001",
+      "title": "이재명 한동훈 토론 이후 여론이 바뀐 것 같나",
+      "body": "후보 검증 이슈가 커지면서 이재명 지지층은 더 열광하고 한동훈 반대층은 분노하는 분위기다.",
+      "published_at": "2026-03-11T10:00:00+09:00",
+      "view_count": 3210,
+      "upvotes": 104,
+      "comment_count": 52,
+      "url": "https://politics.local/posts/pol-001"
+    },
+    {
+      "community_name": "정치토론 커뮤니티",
+      "board_name": "정당 이슈",
+      "external_id": "pol-002",
+      "title": "국민의힘이냐 민주당이냐 또 양극화 심해지네",
+      "body": "서로 조롱이 심하고 정치혐오도 커지는 듯하다. 그래도 총선과 대선 키워드 언급은 확실히 늘었다.",
+      "published_at": "2026-03-11T11:00:00+09:00",
+      "view_count": 2780,
+      "upvotes": 76,
+      "comment_count": 41,
+      "url": "https://politics.local/posts/pol-002"
+    },
+    {
+      "community_name": "정책 커뮤니티",
+      "board_name": "정책 토론",
+      "external_id": "pol-003",
+      "title": "윤석열 국정 수행 평가와 부동산 정책 이슈",
+      "body": "윤석열 정부의 부동산 정책은 반대 의견도 많지만 지지층은 아직 응원한다. 대선 후보 구도에도 영향이 있을까.",
+      "published_at": "2026-03-11T13:30:00+09:00",
+      "view_count": 1980,
+      "upvotes": 65,
+      "comment_count": 19,
+      "url": "https://politics.local/posts/pol-003"
+    }
+  ]
+}

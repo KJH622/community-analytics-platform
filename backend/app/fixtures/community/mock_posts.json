@@ -1,0 +1,58 @@
+{
+  "posts": [
+    {
+      "board_name": "국내주식",
+      "external_id": "mock-001",
+      "title": "오늘 코스피 진짜 반등 간다?",
+      "body": "CPI 부담은 있지만 외국인 수급이 개선되는 것 같다. 아직은 관망 의견도 많다.",
+      "published_at": "2026-03-11T08:30:00+09:00",
+      "author_identifier": "anon-a",
+      "view_count": 1440,
+      "upvotes": 21,
+      "downvotes": 4,
+      "comment_count": 2,
+      "url": "https://community.local/posts/mock-001",
+      "comments": [
+        {
+          "external_id": "mock-001-c1",
+          "body": "반등일 수도 있는데 아직 긴가민가함",
+          "published_at": "2026-03-11T08:35:00+09:00",
+          "author_identifier": "anon-b",
+          "upvotes": 3,
+          "downvotes": 0
+        },
+        {
+          "external_id": "mock-001-c2",
+          "body": "너무 낙관은 금물, 관망하자",
+          "published_at": "2026-03-11T08:36:00+09:00",
+          "author_identifier": "anon-c",
+          "upvotes": 2,
+          "downvotes": 0
+        }
+      ]
+    },
+    {
+      "board_name": "미국주식",
+      "external_id": "mock-002",
+      "title": "엔비디아 또 로켓 가나",
+      "body": "AI 수요가 계속 강해서 분위기는 좋지만 과열이라는 말도 나온다. 그래도 떡상 기대.",
+      "published_at": "2026-03-11T09:15:00+09:00",
+      "author_identifier": "anon-d",
+      "view_count": 2120,
+      "upvotes": 48,
+      "downvotes": 9,
+      "comment_count": 1,
+      "url": "https://community.local/posts/mock-002",
+      "comments": [
+        {
+          "external_id": "mock-002-c1",
+          "body": "과열 같아도 아직 슈팅 남은 듯",
+          "published_at": "2026-03-11T09:17:00+09:00",
+          "author_identifier": "anon-e",
+          "upvotes": 5,
+          "downvotes": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+# Sensitive moderation lexicon.
+# Keep this file separated from application code so operators can review,
+# restrict access, and update terms based on legal/ethical policy.
+멍청
+바보
+한심
+노답
+쓰레기
+조롱
+비웃
+병맛
+저능
