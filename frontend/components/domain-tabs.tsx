@@ -6,13 +6,13 @@ type DomainTabsProps = {
 
 export function DomainTabs({ active }: DomainTabsProps) {
   return (
-    <div className="panel" style={{ marginTop: 22, padding: 10 }}>
-      <div className="tag-row">
-        <Link className="tag" data-active={active === "market"} href="/">
-          경제
+    <div className="domain-tabs-shell">
+      <div className="domain-tabs-track">
+        <Link className="domain-pill" data-active={active === "market"} href="/">
+          Market
         </Link>
-        <Link className="tag" data-active={active === "politics"} href="/politics">
-          정치
+        <Link className="domain-pill" data-active={active === "politics"} href="/politics">
+          Politics
         </Link>
       </div>
     </div>

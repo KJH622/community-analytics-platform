@@ -26,7 +26,7 @@ def get_market_comparison(db: Session, days: int = 14) -> dict:
     if not snapshots:
         return {
             "reference_date": None,
-            "comparison_basis": "최근 구간 0~100 정규화",
+            "comparison_basis": "실제 종가 기준, 휴장일은 직전 거래일 종가를 유지합니다.",
             "latest": {
                 "kospi_close": None,
                 "kosdaq_close": None,
@@ -47,32 +47,27 @@ def get_market_comparison(db: Session, days: int = 14) -> dict:
     kospi_aligned = _align_market_series(dates, kospi_points)
     kosdaq_aligned = _align_market_series(dates, kosdaq_points)
 
-    kospi_scaled = _scale_series(kospi_aligned)
-    kosdaq_scaled = _scale_series(kosdaq_aligned)
-    hate_scaled = _scale_series(hate_values)
-
     points = []
     for index, snapshot in enumerate(snapshots):
         points.append(
             {
                 "date": snapshot.snapshot_date,
-                "kospi_close": kospi_aligned[index],
-                "kosdaq_close": kosdaq_aligned[index],
+                "kospi_close": kospi_aligned[index]["value"],
+                "kosdaq_close": kosdaq_aligned[index]["value"],
                 "hate_index": hate_values[index],
-                "kospi_scaled": kospi_scaled[index],
-                "kosdaq_scaled": kosdaq_scaled[index],
-                "hate_scaled": hate_scaled[index],
+                "kospi_is_carried": kospi_aligned[index]["is_carried"],
+                "kosdaq_is_carried": kosdaq_aligned[index]["is_carried"],
             }
         )
 
     return {
         "reference_date": snapshots[-1].snapshot_date,
-        "comparison_basis": "최근 구간 0~100 정규화",
+        "comparison_basis": "실제 종가 기준, 휴장일은 직전 거래일 종가를 유지합니다.",
         "latest": {
-            "kospi_close": kospi_aligned[-1] if kospi_aligned else None,
-            "kosdaq_close": kosdaq_aligned[-1] if kosdaq_aligned else None,
-            "kospi_change_pct": _pct_change(kospi_aligned),
-            "kosdaq_change_pct": _pct_change(kosdaq_aligned),
+            "kospi_close": kospi_aligned[-1]["value"] if kospi_aligned else None,
+            "kosdaq_close": kosdaq_aligned[-1]["value"] if kosdaq_aligned else None,
+            "kospi_change_pct": _pct_change([item["value"] for item in kospi_aligned]),
+            "kosdaq_change_pct": _pct_change([item["value"] for item in kosdaq_aligned]),
             "hate_index": hate_values[-1] if hate_values else None,
             "hate_change": _diff_change(hate_values),
         },
@@ -109,12 +104,15 @@ def _fetch_yahoo_history(symbol: str) -> list[tuple[str, float]]:
     return rows
 
 
-def _align_market_series(dates: list[str], market_points: list[tuple[str, float]]) -> list[float | None]:
+def _align_market_series(
+    dates: list[str], market_points: list[tuple[str, float]]
+) -> list[dict[str, float | bool | None]]:
     if not market_points:
-        return [None for _ in dates]
+        return [{"value": None, "is_carried": False} for _ in dates]
 
     market_points = sorted(market_points, key=lambda item: item[0])
-    aligned: list[float | None] = []
+    market_dates = {item_date for item_date, _ in market_points}
+    aligned: list[dict[str, float | bool | None]] = []
     cursor = 0
     latest_value: float | None = None
 
@@ -122,28 +120,14 @@ def _align_market_series(dates: list[str], market_points: list[tuple[str, float]
         while cursor < len(market_points) and market_points[cursor][0] <= item_date:
             latest_value = market_points[cursor][1]
             cursor += 1
-        aligned.append(latest_value)
+        aligned.append(
+            {
+                "value": latest_value,
+                "is_carried": latest_value is not None and item_date not in market_dates,
+            }
+        )
 
     return aligned
-
-
-def _scale_series(values: list[float | None]) -> list[float]:
-    numeric = [value for value in values if value is not None]
-    if not numeric:
-        return [0.0 for _ in values]
-
-    minimum = min(numeric)
-    maximum = max(numeric)
-    if maximum == minimum:
-        return [0.0 for _ in values]
-
-    scaled = []
-    for value in values:
-        if value is None:
-            scaled.append(0.0)
-        else:
-            scaled.append(round(((value - minimum) / (maximum - minimum)) * 100, 2))
-    return scaled
 
 
 def _pct_change(values: list[float | None]) -> float | None:

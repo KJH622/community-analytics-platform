@@ -1,73 +1,10 @@
 
-> market-signal-hub-frontend@0.1.0 dev
-> next dev --hostname 0.0.0.0 --port 3000
+> market-signal-hub-frontend@0.1.0 start
+> next start --hostname 127.0.0.1 --port 3000
 
    ▲ Next.js 15.2.0
-   - Local:        http://localhost:3000
-   - Network:      http://0.0.0.0:3000
-   - Environments: .env.local
+   - Local:        http://127.0.0.1:3000
+   - Network:      http://127.0.0.1:3000
 
  ✓ Starting...
- ✓ Ready in 3.7s
- ○ Compiling /politics ...
- ✓ Compiled /politics in 14.7s (1903 modules)
- GET /news 200 in 15937ms
- GET /community 200 in 17752ms
- GET / 200 in 18292ms
- GET /politics 200 in 18010ms
- GET / 200 in 5609ms
- GET / 200 in 284ms
- GET /politics 200 in 47ms
- ✓ Compiled in 1188ms (1894 modules)
- GET / 200 in 244ms
- GET /politics 200 in 255ms
- ✓ Compiled in 1200ms (1900 modules)
- GET / 200 in 299ms
- GET /politics 200 in 372ms
- GET / 200 in 540ms
- GET /politics 500 in 560ms
- GET /politics 200 in 2728ms
- ✓ Compiled in 1109ms (1900 modules)
- GET / 200 in 366ms
- GET /politics 200 in 1501ms
- GET /politics 200 in 2423ms
- GET / 200 in 239ms
- ○ Compiling /news ...
- ✓ Compiled /news in 2.7s (995 modules)
- ✓ Compiled in 2ms (999 modules)
- ✓ Compiled in 1ms (999 modules)
- GET /politics 200 in 4746ms
- ✓ Compiled in 1ms (999 modules)
- GET /community 200 in 5397ms
- GET /politics 200 in 2647ms
- ✓ Compiled in 2ms (999 modules)
- GET /news 200 in 6115ms
- GET / 200 in 3345ms
- ✓ Compiled in 2ms (999 modules)
- ✓ Compiled in 1ms (999 modules)
- ✓ Compiled in 2ms (999 modules)
- GET /politics 200 in 2663ms
- GET / 200 in 2659ms
- GET /politics 200 in 1117ms
- GET /politics 200 in 596ms
- GET /politics 200 in 798ms
- GET /politics 200 in 649ms
- GET / 200 in 77ms
- GET / 200 in 39ms
- ✓ Compiled in 5.3s (1903 modules)
- GET / 200 in 588ms
- ✓ Compiled in 1117ms (1903 modules)
- GET / 200 in 183ms
- GET / 200 in 2532ms
- ✓ Compiled in 505ms (992 modules)
- GET / 200 in 189ms
- GET / 200 in 677ms
- GET /politics 200 in 978ms
- GET / 200 in 187ms
- ✓ Compiled in 1194ms (1903 modules)
- GET / 200 in 180ms
- ✓ Compiled in 607ms (1903 modules)
- GET / 200 in 201ms
- GET / 200 in 951ms
- GET / 200 in 127ms
- GET / 200 in 182ms
+ ✓ Ready in 943ms

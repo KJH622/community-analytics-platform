@@ -17,9 +17,8 @@ class MarketComparisonPointRead(BaseModel):
     kospi_close: float | None
     kosdaq_close: float | None
     hate_index: float
-    kospi_scaled: float
-    kosdaq_scaled: float
-    hate_scaled: float
+    kospi_is_carried: bool
+    kosdaq_is_carried: bool
 
 
 class MarketComparisonResponse(BaseModel):

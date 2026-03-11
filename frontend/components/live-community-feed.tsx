@@ -48,7 +48,7 @@ export function LiveCommunityFeed({
           setLastUpdated(new Date());
         });
       } catch {
-        setError("지금은 피드를 새로고침할 수 없습니다.");
+        setError("지금은 최신 게시글을 다시 불러오지 못하고 있습니다.");
       }
     };
 
@@ -60,14 +60,24 @@ export function LiveCommunityFeed({
     return () => window.clearInterval(timer);
   }, [boardId, boardName, limit, sourceCode, startTransition, topicCategory]);
 
+  const statusText = isPending ? "최신 글을 확인하는 중..." : "실시간 커뮤니티 피드";
+  const updateText = lastUpdated
+    ? `${lastUpdated.toLocaleTimeString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })} 갱신`
+    : "60초마다 자동 갱신";
+
   if (variant === "table") {
     return (
       <div className="live-feed">
         <div className="live-feed-meta">
-          <span>{isPending ? "새 글을 확인하는 중..." : "최신 커뮤니티 글"}</span>
-          <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "60초마다 자동 갱신"}</span>
+          <span>{statusText}</span>
+          <span>{updateText}</span>
         </div>
         {error ? <div className="live-feed-error">{error}</div> : null}
+
         <div className="community-grid" role="list" aria-label="커뮤니티 게시글 목록">
           {posts.map((post) => {
             const analysis = getAnalysis(post);
@@ -75,9 +85,14 @@ export function LiveCommunityFeed({
             return (
               <article className="community-card" key={post.id}>
                 <div className="community-card-top">
-                  <div className="community-time">{formatTime(post.created_at)}</div>
+                  <div className="community-source-line">
+                    <span className="story-badge">{post.source_name ?? post.source_code ?? "COMMUNITY"}</span>
+                    <span>{post.board_name}</span>
+                    <span>{formatTime(post.created_at)}</span>
+                  </div>
+
                   <div className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                    혐오 {analysis.hate_index.toFixed(1)}
+                    혐오 {analysis.hate_index.toFixed(2)}
                   </div>
                 </div>
 
@@ -85,30 +100,36 @@ export function LiveCommunityFeed({
                   <h3>{post.title}</h3>
                 </a>
 
-                <p className="community-body">{truncate(post.body, 140)}</p>
+                <p className="community-body">{truncate(post.body || post.title, 120)}</p>
 
                 <div className="community-meters">
-                  <MetricBar label="혐오" value={analysis.hate_index} tone={getHateTone(analysis.hate_index)} />
+                  <MetricBar
+                    label="혐오지수"
+                    value={analysis.hate_index}
+                    maxValue={3}
+                    tone={getHateTone(analysis.hate_index)}
+                  />
                   <MetricBar
                     label="불확실성"
                     value={analysis.uncertainty_score}
+                    maxValue={3}
                     tone={getUncertaintyTone(analysis.uncertainty_score)}
                   />
                   <MetricBar
                     label="공포 / 탐욕"
                     value={analysis.fear_greed_score}
+                    maxValue={100}
                     tone={getBiasTone(analysis.market_bias)}
                   />
                 </div>
 
                 <div className="community-card-bottom">
                   <div className="community-meta">
-                    <span>{post.source_name ?? post.source_code ?? "community"}</span>
-                    <span>{post.board_name}</span>
                     <span>조회 {post.view_count ?? 0}</span>
                     <span>댓글 {post.comment_count ?? 0}</span>
                     <span>추천 {post.upvotes ?? 0}</span>
                   </div>
+
                   <div className="community-tags">
                     <span className="signal-badge">{getBiasLabel(analysis.market_bias)}</span>
                     {analysis.keywords.slice(0, 3).map((keyword) => (
@@ -129,10 +150,11 @@ export function LiveCommunityFeed({
   return (
     <div className="live-feed">
       <div className="live-feed-meta">
-        <span>{isPending ? "새 글을 확인하는 중..." : "최신 커뮤니티 글"}</span>
-        <span>{lastUpdated ? `${lastUpdated.toLocaleTimeString("ko-KR")} 갱신` : "60초마다 자동 갱신"}</span>
+        <span>{statusText}</span>
+        <span>{updateText}</span>
       </div>
       {error ? <div className="live-feed-error">{error}</div> : null}
+
       <div className="list">
         {posts.map((item) => {
           const analysis = getAnalysis(item);
@@ -140,18 +162,21 @@ export function LiveCommunityFeed({
           return (
             <a className="list-item" href={item.original_url} key={item.id} target="_blank" rel="noreferrer">
               <div className="list-meta">
-                {(item.source_name ?? item.source_code ?? "community")} / {item.board_name} / 조회 {item.view_count ?? 0}
+                {(item.source_name ?? item.source_code ?? "COMMUNITY")} / {item.board_name} / 조회 {item.view_count ?? 0}
               </div>
+
               <div className="list-headline">
                 <strong>{item.title}</strong>
                 <span className={`hate-pill hate-pill-${getHateTone(analysis.hate_index)}`}>
-                  혐오 {analysis.hate_index.toFixed(1)}
+                  혐오 {analysis.hate_index.toFixed(2)}
                 </span>
               </div>
-              <p>{item.body}</p>
+
+              <p>{truncate(item.body || item.title, 180)}</p>
+
               <div className="inline-analysis">
                 <span>{getBiasLabel(analysis.market_bias)}</span>
-                <span>불확실성 {analysis.uncertainty_score.toFixed(1)}</span>
+                <span>불확실성 {analysis.uncertainty_score.toFixed(2)}</span>
                 <span>키워드 {analysis.keywords.slice(0, 2).join(", ") || "-"}</span>
               </div>
             </a>
@@ -162,15 +187,27 @@ export function LiveCommunityFeed({
   );
 }
 
-function MetricBar({ label, value, tone }: { label: string; value: number; tone: string }) {
+function MetricBar({
+  label,
+  value,
+  maxValue,
+  tone,
+}: {
+  label: string;
+  value: number;
+  maxValue: number;
+  tone: string;
+}) {
+  const width = Math.max(8, Math.min(100, (Math.max(0, value) / maxValue) * 100));
+
   return (
     <div className="metric-bar">
       <div className="metric-bar-head">
         <span>{label}</span>
-        <strong>{value.toFixed(1)}</strong>
+        <strong>{value.toFixed(2)}</strong>
       </div>
       <div className="metric-bar-track">
-        <div className={`metric-bar-fill metric-bar-fill-${tone}`} style={{ width: `${Math.max(4, value)}%` }} />
+        <div className={`metric-bar-fill metric-bar-fill-${tone}`} style={{ width: `${width}%` }} />
       </div>
     </div>
   );
@@ -185,28 +222,28 @@ function truncate(value: string, length: number) {
 
 function formatTime(value: string) {
   return new Intl.DateTimeFormat("ko-KR", {
-    hour: "2-digit",
-    minute: "2-digit",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   }).format(new Date(value));
 }
 
 function getHateTone(value: number) {
-  if (value >= 60) {
+  if (value >= 2) {
     return "high";
   }
-  if (value >= 25) {
+  if (value >= 1) {
     return "mid";
   }
   return "low";
 }
 
 function getUncertaintyTone(value: number) {
-  if (value >= 50) {
+  if (value >= 2) {
     return "high";
   }
-  if (value >= 20) {
+  if (value >= 0.8) {
     return "mid";
   }
   return "low";

@@ -119,9 +119,8 @@ export type MarketComparisonPoint = {
   kospi_close: number | null;
   kosdaq_close: number | null;
   hate_index: number;
-  kospi_scaled: number;
-  kosdaq_scaled: number;
-  hate_scaled: number;
+  kospi_is_carried: boolean;
+  kosdaq_is_carried: boolean;
 };
 
 export type MarketComparison = {
@@ -289,7 +288,7 @@ export async function fetchCommunityLive(query: CommunityQuery = {}) {
 
 const emptyMarketComparison: MarketComparison = {
   reference_date: null,
-  comparison_basis: "최근 구간 0~100 정규화",
+  comparison_basis: "실제 종가 기준, 휴장일은 직전 거래일 종가를 유지합니다.",
   latest: {
     kospi_close: null,
     kosdaq_close: null,
@@ -301,10 +300,11 @@ const emptyMarketComparison: MarketComparison = {
   points: [],
 };
 
-export async function fetchMarketComparison(days = 14) {
-  const payload = await getJson<Partial<MarketComparison>>(`/api/v1/market/comparison?days=${days}`, "no-store").catch(
-    () => ({})
-  );
+export async function fetchMarketComparison(days = 14): Promise<MarketComparison> {
+  const payload: Partial<MarketComparison> = await getJson<Partial<MarketComparison>>(
+    `/api/v1/market/comparison?days=${days}`,
+    "no-store"
+  ).catch(() => ({}));
   return {
     ...emptyMarketComparison,
     ...payload,
@@ -341,8 +341,11 @@ const emptyPoliticsDashboard: PoliticsDashboard = {
   hot_posts: [],
 };
 
-export async function fetchPoliticsDashboard() {
-  const payload = await getJson<Partial<PoliticsDashboard>>("/api/v1/politics/dashboard", "no-store").catch(() => ({}));
+export async function fetchPoliticsDashboard(): Promise<PoliticsDashboard> {
+  const payload: Partial<PoliticsDashboard> = await getJson<Partial<PoliticsDashboard>>(
+    "/api/v1/politics/dashboard",
+    "no-store"
+  ).catch(() => ({}));
   return {
     ...emptyPoliticsDashboard,
     ...payload,

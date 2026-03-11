@@ -13,19 +13,22 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <div className="shell">
           <header className="topbar">
-            <div>
+            <div className="topbar-copy">
+              <span className="brand-kicker">REALTIME INTELLIGENCE</span>
               <div className="brand-title">Market Signal Hub</div>
               <div className="brand-subtitle">
-                한국 경제·정치 커뮤니티를 주기적으로 수집하고 감정 분석에 활용하는 통합 대시보드입니다.
+                경제 데이터, 뉴스, 커뮤니티 반응과 정치 흐름을 한 화면에서 읽는 실시간 시그널 대시보드
               </div>
             </div>
+
             <nav className="nav">
-              <Link href="/">경제</Link>
-              <Link href="/politics">정치</Link>
-              <Link href="/news">뉴스</Link>
-              <Link href="/community">커뮤니티</Link>
+              <Link href="/">Dashboard</Link>
+              <Link href="/politics">Politics</Link>
+              <Link href="/news">News</Link>
+              <Link href="/community">Community</Link>
             </nav>
           </header>
+
           {children}
         </div>
       </body>
