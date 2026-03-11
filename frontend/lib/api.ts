@@ -1,4 +1,13 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+function getApiBase() {
+  if (typeof window !== "undefined") {
+    const { protocol, hostname } = window.location;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return `${protocol}//${hostname}:8000`;
+    }
+  }
+
+  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+}
 
 type PageResponse<T> = {
   items: T[];
@@ -8,7 +17,7 @@ type PageResponse<T> = {
 };
 
 async function getJson<T>(path: string, cache: RequestCache = "force-cache"): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${getApiBase()}${path}`, {
     cache,
     next: cache === "force-cache" ? { revalidate: 60 } : undefined,
   });
@@ -281,9 +290,7 @@ export async function fetchCommunityLive(query: CommunityQuery = {}) {
   if (topicCategory) {
     parts.push(`topic_category=${encodeURIComponent(topicCategory)}`);
   }
-  return getJson<PageResponse<CommunityPost>>(`/api/v1/community/posts?${parts.join("&")}`, "no-store").catch(() =>
-    emptyPage<CommunityPost>(pageSize)
-  );
+  return getJson<PageResponse<CommunityPost>>(`/api/v1/community/posts?${parts.join("&")}`, "no-store");
 }
 
 const emptyMarketComparison: MarketComparison = {

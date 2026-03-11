@@ -22,6 +22,14 @@ function formatValue(value: number) {
 }
 
 export function ChartPanel({ title, description, data, color = "#b5532f" }: ChartPanelProps) {
+  const numericValues = data.map((item) => item.value);
+  const minValue = numericValues.length ? Math.min(...numericValues) : 0;
+  const maxValue = numericValues.length ? Math.max(...numericValues) : 0;
+  const baseRange = maxValue - minValue;
+  const padding = baseRange > 0 ? baseRange * 0.22 : Math.max(Math.abs(maxValue) * 0.08, 1);
+  const axisMin = minValue >= 0 ? Math.max(0, minValue - padding) : minValue - padding;
+  const axisMax = maxValue + padding;
+
   return (
     <div className="panel chart-panel">
       <div className="chart-panel-head">
@@ -44,6 +52,9 @@ export function ChartPanel({ title, description, data, color = "#b5532f" }: Char
           },
           yAxis: {
             type: "value",
+            scale: true,
+            min: axisMin,
+            max: axisMax,
             axisLabel: {
               color: "#66768b",
               formatter: (value: number) => formatValue(value),

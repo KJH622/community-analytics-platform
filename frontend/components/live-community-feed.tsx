@@ -77,6 +77,7 @@ export function LiveCommunityFeed({
           <span>{updateText}</span>
         </div>
         {error ? <div className="live-feed-error">{error}</div> : null}
+        {!posts.length ? <div className="live-feed-error">표시할 경제 게시글이 아직 없습니다.</div> : null}
 
         <div className="community-grid" role="list" aria-label="커뮤니티 게시글 목록">
           {posts.map((post) => {
@@ -154,6 +155,7 @@ export function LiveCommunityFeed({
         <span>{updateText}</span>
       </div>
       {error ? <div className="live-feed-error">{error}</div> : null}
+      {!posts.length ? <div className="live-feed-error">표시할 경제 게시글이 아직 없습니다.</div> : null}
 
       <div className="list">
         {posts.map((item) => {

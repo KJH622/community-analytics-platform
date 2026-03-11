@@ -14,7 +14,9 @@ class Settings(BaseSettings):
     scheduler_enabled: bool = True
     scheduler_timezone: str = "Asia/Seoul"
     api_prefix: str = "/api/v1"
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    cors_origins: list[str] = Field(
+        default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]
+    )
     default_user_agent: str = "market-signal-hub/0.1 (+https://example.local)"
     request_timeout_seconds: int = 20
     request_rate_limit_per_source: float = 1.0
