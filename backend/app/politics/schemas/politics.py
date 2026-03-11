@@ -55,14 +55,90 @@ class PoliticalSentimentRead(BaseModel):
     labels: list[str]
 
 
+class PoliticsSummaryRead(BaseModel):
+    reference_date: date | None
+    post_count: int
+    today_post_count: int
+    community_count: int
+    top_issue: str | None
+    top_politician: str | None
+
+
+class PoliticsPolarizationPointRead(BaseModel):
+    date: date
+    support_rate: float
+    oppose_rate: float
+    neutral_rate: float
+    mentions: int
+
+
+class PoliticsEmotionRead(BaseModel):
+    date: date | None
+    anger_pct: float
+    positive_pct: float
+    neutral_pct: float
+    mentions: int
+
+
+class PoliticsIssueSentimentRead(BaseModel):
+    issue: str
+    mentions: int
+    positive_pct: float
+    negative_pct: float
+    neutral_pct: float
+
+
+class PoliticsIssueSourceReactionRead(BaseModel):
+    source_code: str
+    source_name: str
+    mentions: int
+    support_pct: float
+    oppose_pct: float
+    neutral_pct: float
+
+
+class PoliticsIssueComparisonRead(BaseModel):
+    issue: str
+    sources: list[PoliticsIssueSourceReactionRead]
+
+
+class PoliticsPoliticianRankingRead(BaseModel):
+    name: str
+    mentions: int
+
+
+class PoliticsTimelineEventRead(BaseModel):
+    date: date
+    issue: str
+    headline: str
+    mentions: int
+
+
+class PoliticsHotPostRead(BaseModel):
+    id: int
+    source_code: str
+    source_name: str
+    board_name: str
+    title: str
+    body: str
+    created_at: datetime
+    view_count: int | None
+    upvotes: int | None
+    comment_count: int | None
+    original_url: str
+    issue_labels: list[str]
+    stance: str
+    emotion: str
+    influence_score: float
+
+
 class PoliticsDashboardResponse(BaseModel):
-    indicator_cards: list[PoliticalIndicatorValueRead]
-    approval_trend: list[PoliticalIndicatorValueRead]
-    party_support_comparison: list[PoliticalIndicatorValueRead]
-    politician_mentions_top10: list[dict]
-    keyword_trends: list[dict]
-    political_sentiment_index: list[dict]
-    polarization_index: list[dict]
-    election_heat_index: list[dict]
-    community_posts: list[PoliticalPostRead]
-    reference_communities: list[PoliticalCommunitySourceRead]
+    reference_date: date | None
+    summary: PoliticsSummaryRead
+    polarization_trend: list[PoliticsPolarizationPointRead]
+    today_emotion: PoliticsEmotionRead
+    issue_sentiments: list[PoliticsIssueSentimentRead]
+    issue_source_comparisons: list[PoliticsIssueComparisonRead]
+    politician_rankings: list[PoliticsPoliticianRankingRead]
+    issue_timeline: list[PoliticsTimelineEventRead]
+    hot_posts: list[PoliticsHotPostRead]

@@ -10,8 +10,8 @@ from app.politics.schemas.politics import (
     PoliticsDashboardResponse,
     PoliticianRead,
 )
+from app.politics.services.live_dashboard import build_politics_dashboard
 from app.politics.services.query import (
-    get_dashboard_payload,
     get_political_indicators,
     get_political_keywords,
     get_political_polarization,
@@ -26,28 +26,7 @@ router = APIRouter(prefix="/api/v1/politics", tags=["politics"])
 
 @router.get("/dashboard", response_model=PoliticsDashboardResponse)
 def politics_dashboard(db: Session = Depends(get_db)):
-    payload = get_dashboard_payload(db)
-    return PoliticsDashboardResponse(
-        indicator_cards=[PoliticalIndicatorValueRead(**item) for item in payload["indicator_cards"]],
-        approval_trend=[PoliticalIndicatorValueRead(**item) for item in payload["approval_trend"]],
-        party_support_comparison=[PoliticalIndicatorValueRead(**item) for item in payload["party_support_comparison"]],
-        politician_mentions_top10=payload["politician_mentions_top10"],
-        keyword_trends=payload["keyword_trends"],
-        political_sentiment_index=payload["political_sentiment_index"],
-        polarization_index=payload["polarization_index"],
-        election_heat_index=payload["election_heat_index"],
-        community_posts=[PoliticalPostRead.model_validate(item) for item in payload["community_posts"]],
-        reference_communities=[
-            PoliticalCommunitySourceRead(
-                name=item.name,
-                description=item.description,
-                leaning=item.leaning,
-                link=item.link,
-                status=item.status,
-            )
-            for item in payload["reference_communities"]
-        ],
-    )
+    return PoliticsDashboardResponse.model_validate(build_politics_dashboard(db))
 
 
 @router.get("/politicians", response_model=list[PoliticianRead])

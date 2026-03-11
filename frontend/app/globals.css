@@ -585,3 +585,186 @@ select {
     min-width: 760px;
   }
 }
+
+.politics-emotion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.politics-emotion-card {
+  border: 1.5px solid var(--line);
+  padding: 14px;
+  background: #fff8f1;
+}
+
+.politics-emotion-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.politics-emotion-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.politics-emotion-card[data-tone="anger"] {
+  background: #fff0eb;
+}
+
+.politics-emotion-card[data-tone="positive"] {
+  background: #eef8f1;
+}
+
+.politics-emotion-card[data-tone="neutral"] {
+  background: #f5f0e6;
+}
+
+.politics-bar-list,
+.politics-source-list,
+.politics-hot-list,
+.politics-timeline {
+  display: grid;
+  gap: 12px;
+}
+
+.politics-bar-card,
+.politics-issue-card,
+.politics-hot-post,
+.politics-timeline-item {
+  border: 1.5px solid var(--line);
+  background: #fffdf8;
+  padding: 14px;
+}
+
+.politics-bar-head,
+.politics-hot-top,
+.politics-hot-meta,
+.politics-source-name,
+.politics-source-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.politics-bar-head span,
+.politics-hot-meta,
+.politics-source-name span,
+.politics-source-meta,
+.politics-bar-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.politics-bar-meta,
+.politics-source-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.politics-stacked-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #eadfce;
+  margin-top: 10px;
+}
+
+.politics-bar-segment {
+  display: block;
+  height: 100%;
+}
+
+.politics-bar-positive {
+  background: #2e8b57;
+}
+
+.politics-bar-negative {
+  background: #c84f3d;
+}
+
+.politics-bar-neutral {
+  background: #a48b5f;
+}
+
+.politics-source-row + .politics-source-row {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--soft);
+}
+
+.politics-hot-post strong {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.politics-hot-post p,
+.politics-timeline-item p {
+  margin: 8px 0 0;
+  color: #47433d;
+  line-height: 1.55;
+}
+
+.politics-hot-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.politics-ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.politics-ranking-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  background: #fff8f1;
+}
+
+.politics-ranking-item strong {
+  display: block;
+}
+
+.politics-ranking-item span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.politics-timeline-item {
+  border-left: 4px solid var(--accent);
+}
+
+.politics-timeline-item span {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.politics-timeline-item strong {
+  display: block;
+}
+
+@media (max-width: 980px) {
+  .politics-emotion-grid {
+    grid-template-columns: 1fr;
+  }
+}

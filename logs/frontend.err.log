@@ -1,0 +1,34 @@
+ ⨯ TypeError: Cannot read properties of undefined (reading 'post_count')
+    at PoliticsPage (app\politics\page.tsx:65:62)
+  63 |
+  64 |           <div className="card-grid">
+> 65 |             <MetricCard label="정치 글 수" value={`${data.summary.post_count}`} caption="최근 30일 정치 게시글 수" />
+     |                                                              ^
+  66 |             <MetricCard label="오늘 글 수" value={`${data.summary.today_post_count}`} caption="최근 기준일 정치 게시글 수" />
+  67 |             <MetricCard label="가장 뜨거운 이슈" value={data.summary.top_issue ?? "-"} caption="최근 30일 최다 언급 이슈" />
+  68 |             <MetricCard {
+  digest: '3997714125'
+}
+ ⚠ ./app/globals.css.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/globals.css
+Warning
+
+(95:3) autoprefixer: end value has mixed support, consider using flex-end instead
+
+Import trace for requested module:
+./app/globals.css.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/globals.css
+./app/globals.css
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ TypeError: Cannot read properties of undefined (reading 'post_count')
+    at PoliticsPage (app\politics\page.tsx:65:62)
+  63 |
+  64 |           <div className="card-grid">
+> 65 |             <MetricCard label="정치 글 수" value={`${data.summary.post_count}`} caption="최근 30일 정치 게시글 수" />
+     |                                                              ^
+  66 |             <MetricCard label="오늘 글 수" value={`${data.summary.today_post_count}`} caption="최근 기준일 정치 게시글 수" />
+  67 |             <MetricCard label="가장 뜨거운 이슈" value={data.summary.top_issue ?? "-"} caption="최근 30일 최다 언급 이슈" />
+  68 |             <MetricCard {
+  digest: '3997714125'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Skipped not serializable cache item 'Compilation/modules|C:\Users\user\Desktop\pj\community-analytics-platform\frontend\node_modules\next\dist\build\webpack\loaders\css-loader\src\index.js??ruleSet[1].rules[13].oneOf[10].use[2]!C:\Users\user\Desktop\pj\community-analytics-platform\frontend\node_modules\next\dist\build\webpack\loaders\postcss-loader\src\index.js??ruleSet[1].rules[13].oneOf[10].use[3]!C:\Users\user\Desktop\pj\community-analytics-platform\frontend\app\globals.css': No serializer registered for Warning
+<w> while serializing webpack/lib/cache/PackFileCacheStrategy.PackContentItems -> webpack/lib/NormalModule -> Array { 1 items } -> webpack/lib/ModuleWarning -> Warning
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.

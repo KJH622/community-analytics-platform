@@ -104,6 +104,94 @@ export type DailySnapshot = {
 
 export type KeywordTrend = { keyword: string; mentions: number };
 export type TopicBreakdown = { topic: string; documents: number };
+export type PoliticsSummary = {
+  reference_date: string | null;
+  post_count: number;
+  today_post_count: number;
+  community_count: number;
+  top_issue: string | null;
+  top_politician: string | null;
+};
+
+export type PoliticsPolarizationPoint = {
+  date: string;
+  support_rate: number;
+  oppose_rate: number;
+  neutral_rate: number;
+  mentions: number;
+};
+
+export type PoliticsEmotion = {
+  date: string | null;
+  anger_pct: number;
+  positive_pct: number;
+  neutral_pct: number;
+  mentions: number;
+};
+
+export type PoliticsIssueSentiment = {
+  issue: string;
+  mentions: number;
+  positive_pct: number;
+  negative_pct: number;
+  neutral_pct: number;
+};
+
+export type PoliticsIssueSourceReaction = {
+  source_code: string;
+  source_name: string;
+  mentions: number;
+  support_pct: number;
+  oppose_pct: number;
+  neutral_pct: number;
+};
+
+export type PoliticsIssueComparison = {
+  issue: string;
+  sources: PoliticsIssueSourceReaction[];
+};
+
+export type PoliticsPoliticianRanking = {
+  name: string;
+  mentions: number;
+};
+
+export type PoliticsTimelineEvent = {
+  date: string;
+  issue: string;
+  headline: string;
+  mentions: number;
+};
+
+export type PoliticsHotPost = {
+  id: number;
+  source_code: string;
+  source_name: string;
+  board_name: string;
+  title: string;
+  body: string;
+  created_at: string;
+  view_count: number | null;
+  upvotes: number | null;
+  comment_count: number | null;
+  original_url: string;
+  issue_labels: string[];
+  stance: string;
+  emotion: string;
+  influence_score: number;
+};
+
+export type PoliticsDashboard = {
+  reference_date: string | null;
+  summary: PoliticsSummary;
+  polarization_trend: PoliticsPolarizationPoint[];
+  today_emotion: PoliticsEmotion;
+  issue_sentiments: PoliticsIssueSentiment[];
+  issue_source_comparisons: PoliticsIssueComparison[];
+  politician_rankings: PoliticsPoliticianRanking[];
+  issue_timeline: PoliticsTimelineEvent[];
+  hot_posts: PoliticsHotPost[];
+};
 
 export async function fetchDashboardData() {
   const [indicators, news, community, sentiment, keywordTrends, topicBreakdown] = await Promise.all([
@@ -170,4 +258,51 @@ export async function fetchCommunityLive(query: CommunityQuery = {}) {
   return getJson<PageResponse<CommunityPost>>(`/api/v1/community/posts?${parts.join("&")}`, "no-store").catch(() =>
     emptyPage<CommunityPost>(pageSize)
   );
+}
+
+const emptyPoliticsDashboard: PoliticsDashboard = {
+  reference_date: null,
+  summary: {
+    reference_date: null,
+    post_count: 0,
+    today_post_count: 0,
+    community_count: 0,
+    top_issue: null,
+    top_politician: null,
+  },
+  polarization_trend: [],
+  today_emotion: {
+    date: null,
+    anger_pct: 0,
+    positive_pct: 0,
+    neutral_pct: 0,
+    mentions: 0,
+  },
+  issue_sentiments: [],
+  issue_source_comparisons: [],
+  politician_rankings: [],
+  issue_timeline: [],
+  hot_posts: [],
+};
+
+export async function fetchPoliticsDashboard() {
+  const payload = await getJson<Partial<PoliticsDashboard>>("/api/v1/politics/dashboard", "no-store").catch(() => ({}));
+  return {
+    ...emptyPoliticsDashboard,
+    ...payload,
+    summary: {
+      ...emptyPoliticsDashboard.summary,
+      ...(payload.summary ?? {}),
+    },
+    today_emotion: {
+      ...emptyPoliticsDashboard.today_emotion,
+      ...(payload.today_emotion ?? {}),
+    },
+    polarization_trend: payload.polarization_trend ?? emptyPoliticsDashboard.polarization_trend,
+    issue_sentiments: payload.issue_sentiments ?? emptyPoliticsDashboard.issue_sentiments,
+    issue_source_comparisons: payload.issue_source_comparisons ?? emptyPoliticsDashboard.issue_source_comparisons,
+    politician_rankings: payload.politician_rankings ?? emptyPoliticsDashboard.politician_rankings,
+    issue_timeline: payload.issue_timeline ?? emptyPoliticsDashboard.issue_timeline,
+    hot_posts: payload.hot_posts ?? emptyPoliticsDashboard.hot_posts,
+  };
 }

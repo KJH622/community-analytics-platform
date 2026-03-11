@@ -1,9 +1,9 @@
-INFO:     Started server process [20536]
+INFO:     Started server process [42336]
 INFO:     Waiting for application startup.
-2026-03-12 00:44:21,778 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 00:44:21,779 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 00:44:21,780 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 00:44:21,780 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
-2026-03-12 00:44:21,781 | INFO | apscheduler.scheduler | Scheduler started
+2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:06:53,326 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:06:53,327 | INFO | apscheduler.scheduler | Added job "build_scheduler.<locals>.<lambda>" to job store "default"
+2026-03-12 01:06:53,327 | INFO | apscheduler.scheduler | Scheduler started
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)

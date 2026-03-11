@@ -18,3 +18,37 @@
  GET / 200 in 5609ms
  GET / 200 in 284ms
  GET /politics 200 in 47ms
+ ✓ Compiled in 1188ms (1894 modules)
+ GET / 200 in 244ms
+ GET /politics 200 in 255ms
+ ✓ Compiled in 1200ms (1900 modules)
+ GET / 200 in 299ms
+ GET /politics 200 in 372ms
+ GET / 200 in 540ms
+ GET /politics 500 in 560ms
+ GET /politics 200 in 2728ms
+ ✓ Compiled in 1109ms (1900 modules)
+ GET / 200 in 366ms
+ GET /politics 200 in 1501ms
+ GET /politics 200 in 2423ms
+ GET / 200 in 239ms
+ ○ Compiling /news ...
+ ✓ Compiled /news in 2.7s (995 modules)
+ ✓ Compiled in 2ms (999 modules)
+ ✓ Compiled in 1ms (999 modules)
+ GET /politics 200 in 4746ms
+ ✓ Compiled in 1ms (999 modules)
+ GET /community 200 in 5397ms
+ GET /politics 200 in 2647ms
+ ✓ Compiled in 2ms (999 modules)
+ GET /news 200 in 6115ms
+ GET / 200 in 3345ms
+ ✓ Compiled in 2ms (999 modules)
+ ✓ Compiled in 1ms (999 modules)
+ ✓ Compiled in 2ms (999 modules)
+ GET /politics 200 in 2663ms
+ GET / 200 in 2659ms
+ GET /politics 200 in 1117ms
+ GET /politics 200 in 596ms
+ GET /politics 200 in 798ms
+ GET /politics 200 in 649ms
