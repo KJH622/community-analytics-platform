@@ -10,7 +10,7 @@ from app.politics.schemas.politics import (
     PoliticsDashboardResponse,
     PoliticianRead,
 )
-from app.politics.services.live_dashboard import build_politics_dashboard
+from app.politics.services.dashboard_loader import load_politics_dashboard
 from app.politics.services.query import (
     get_political_indicators,
     get_political_keywords,
@@ -26,7 +26,7 @@ router = APIRouter(prefix="/api/v1/politics", tags=["politics"])
 
 @router.get("/dashboard", response_model=PoliticsDashboardResponse)
 def politics_dashboard(db: Session = Depends(get_db)):
-    return PoliticsDashboardResponse.model_validate(build_politics_dashboard(db))
+    return PoliticsDashboardResponse.model_validate(load_politics_dashboard(db))
 
 
 @router.get("/politicians", response_model=list[PoliticianRead])

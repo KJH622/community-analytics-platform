@@ -34,8 +34,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./frontend/.env.local
-    depends_on:
-      - backend
+    environment:
+      INTERNAL_API_BASE_URL: http://host.docker.internal:8000
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     volumes:
