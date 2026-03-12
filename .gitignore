@@ -1,26 +1,19 @@
-# Python 가상환경
-.venv/
-venv/
-
-# Python 캐시
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# GitHub Token (중요!)
-secrets.py
-*.token
-token.txt
-config.json
 .env
+backend/.env
+frontend/.env.local
 
-# macOS
-.DS_Store
+backend/backend-run.log
+frontend/frontend-run.log
 
-# IDE
-.vscode/
-.idea/
+backend/market_signal_hub.db
 
-# 로그
-*.log
+backend/.pytest_cache/
+backend/market_signal_hub_backend.egg-info/
+backend/app/**/__pycache__/
+backend/tests/**/__pycache__/
+
+frontend/node_modules/
+frontend/.next/
+frontend/.cache/
+
+*.pyc

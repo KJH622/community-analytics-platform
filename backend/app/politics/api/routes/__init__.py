@@ -1,0 +1,1 @@
+"""Political route registration."""
